@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import {
   ChakraProvider,
   extendTheme,
@@ -8,12 +8,13 @@ import {
 } from '@chakra-ui/react';
 import App from './App';
 import { mode } from '@chakra-ui/theme-tools';
+import { BrowserRouter } from 'react-router-dom';
 
-// Defineing my Chakra UI theme
+// Define your Chakra UI theme
 const theme = extendTheme({
   config: {
-    initialColorMode: 'dark', // Settting up the initial color mode to 'dark'
-    useSystemColorMode: true, // Useing system color mode as a fallback
+    initialColorMode: 'dark', // Set the initial color mode to 'dark'
+    useSystemColorMode: true, // Use system color mode as a fallback
   },
   colors: {
     gray: {
@@ -34,11 +35,15 @@ const theme = extendTheme({
 const rootElement = document.getElementById('root');
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />{' '}
-      {/* Initializing color mode */}
-      <CSSReset /> {/* Reseting default CSS styles */}
-      <App />
-    </ChakraProvider>
+    <BrowserRouter>
+      {' '}
+      {/* Wrap your app with BrowserRouter */}
+      <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />{' '}
+        {/* Initialize color mode */}
+        <CSSReset /> {/* Reset default CSS styles */}
+        <App />
+      </ChakraProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
