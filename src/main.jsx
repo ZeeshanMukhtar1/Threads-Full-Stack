@@ -13,8 +13,8 @@ const theme = extendTheme({
   },
   colors: {
     gray: {
-      800: '#616161', // Customize gray color for dark mode
-      900: '#1e1e1e', // Customize gray color for light mode
+      light: '#616161', // Customize gray color for dark mode
+      dark: '#1e1e1e', // Customize gray color for light mode
     },
   },
   styles: {

@@ -1,5 +1,11 @@
+import UserHeader from '../components/UserHeader';
+
 const PostPage = () => {
-  return <h2>post page</h2>;
+  return (
+    <>
+      <UserHeader />
+    </>
+  );
 };
 
 export default PostPage;
