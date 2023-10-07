@@ -11,7 +11,7 @@ const Header = () => {
       {/* Rendering an image that changes based on the current color mode */}
       <Image
         cursor="pointer"
-        src={colorMode === 'dark' ? '/public/light-logo.svg' : '/public/dark-logo.svg'}
+        src={colorMode === 'dark' ? '/light-logo.svg' : '/dark-logo.svg'}
         alt="logo"
         w={6}
         onClick={toggleColorMode}

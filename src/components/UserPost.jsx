@@ -7,7 +7,7 @@ const UserPost = () => {
     <Link to={'/MarkZuckerberg/post/1'}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
-          <Avatar size={'md'} name={'Mark Zuckerberg'} src="/public/zuck-avatar.png" />
+          <Avatar size={'md'} name={'Mark Zuckerberg'} src="/zuck-avatar.png" />
           <Box w="1px" h={'full'} bg={'gray.light'} my={2}></Box>
           <Box position={'relative'} w={'full'}>
             <Avatar
@@ -45,7 +45,7 @@ const UserPost = () => {
               <Text fontSize={'sm'} fontWeight={'bold'}>
                 Markzuckerberk
               </Text>
-              <Image src="/public/verified.png" alt="verified" w={4} h={4} ml={1} />
+              <Image src="/verified.png" alt="verified" w={4} h={4} ml={1} />
             </Flex>
             <Flex gap={4} alignItems={'center'}>
               <Text fontSize={'sm'}>1d</Text>
@@ -54,7 +54,7 @@ const UserPost = () => {
           </Flex>
           <Text fontSize={'sm'}>This is my first post</Text>
           <Box borderRadius={6} overflow={'hidden'} border={'1px solid '} borderColor={'gray.light'}>
-            <Image src="/public/post1.png" alt="post" w={'full'} />
+            <Image src="/post1.png" alt="post" w={'full'} />
           </Box>
         </Flex>
       </Flex>
