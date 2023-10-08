@@ -38,21 +38,46 @@ const UserHeader = () => {
       <Flex justifyContent={'space-between'} w={'full'}>
         <Box>
           {/* User's name */}
-          <Text fontSize={'2xl'} fontWeight={'bold'}>
+          <Text
+            fontSize={{
+              base: 'md',
+              md: 'lg',
+              lg: 'xl',
+            }}
+            fontWeight={'bold'}
+          >
             Mark Zuckerberg
           </Text>
           <Flex gap={2} alignItems={'center'}>
             {/* User's username */}
             <Text fontSize={'sm'}>Zuc1122</Text>
             {/* User's organization or label */}
-            <Text fontSize={'xs'} bg={'gray.dark'} color={'gray.light'} p={1} borderRadius={'full'}>
+            <Text
+              fontSize={{
+                base: 'xs',
+                md: 'sm',
+                lg: 'md',
+              }}
+              bg={'gray.dark'}
+              color={'gray.light'}
+              p={1}
+              borderRadius={'full'}
+            >
               Threads.net
             </Text>
           </Flex>
         </Box>
         <Box>
           {/* User's avatar */}
-          <Avatar size={'xl'} name={'Mark Zuckerberg'} src="/zuck-avatar.png" />
+          <Avatar
+            size={{
+              base: 'md',
+              md: 'lg',
+              lg: 'xl',
+            }}
+            name={'Mark Zuckerberg'}
+            src="/zuck-avatar.png"
+          />
         </Box>
       </Flex>
 

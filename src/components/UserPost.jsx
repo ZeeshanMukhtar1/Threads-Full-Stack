@@ -1,8 +1,11 @@
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import Actions from './Actions';
+import { useState } from 'react';
 
-const UserPost = () => {
+const UserPost = ({ likes, replies, postImg, postTitle }) => {
+  const [liked, setLiked] = useState(false); // Initialize liked state
   return (
     <Link to={'/MarkZuckerberg/post/1'}>
       <Flex gap={3} mb={4} py={5}>
@@ -52,10 +55,27 @@ const UserPost = () => {
               <BsThreeDotsVertical />
             </Flex>
           </Flex>
-          <Text fontSize={'sm'}>This is my first post</Text>
-          <Box borderRadius={6} overflow={'hidden'} border={'1px solid '} borderColor={'gray.light'}>
-            <Image src="/post1.png" alt="post" w={'full'} />
-          </Box>
+          <Text fontSize={'sm'}>{postTitle}</Text>
+          {
+            // Display the image only if postImg is passed
+            postImg && (
+              <Box borderRadius={6} overflow={'hidden'} border={'1px solid '} borderColor={'gray.light'}>
+                <Image src={postImg} alt="post" w={'full'} />
+              </Box>
+            )
+          }
+          <Flex gap={3} my={1}>
+            <Actions liked={liked} setLiked={setLiked} /> {/* Pass liked and setLiked props */}
+          </Flex>
+          <Flex gap={2} alignItems={'center'}>
+            <Text color={'gray.light'} fontSize={'small'} alignItems={'center'}>
+              {replies} Replies
+            </Text>
+            <Box w={1} h={1} borderRadius={'full'} bg={'gray.light'}></Box>
+            <Text color={'gray.light'} fontSize={'small'} alignItems={'center'}>
+              {likes} Likes
+            </Text>
+          </Flex>
         </Flex>
       </Flex>
     </Link>
