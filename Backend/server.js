@@ -1,7 +1,10 @@
 import Express from 'express';
 import dotenv from 'dotenv';
+import connectDB from './db/connetDB.js';
 
 dotenv.config();
+
+connectDB();
 
 const app = Express();
 
