@@ -47,4 +47,37 @@ const signupUser = async (req, res) => {
   }
 };
 
-export default { signupUser };
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Query the User model from the database, using a different variable name
+    const foundUser = await User.findOne({ username: username });
+
+    if (!foundUser) {
+      return res.status(400).json({ message: 'Invalid username or password' });
+    }
+
+    // Check if the password matches the hashed password in the database
+    const isPasswordMatch = await bcrypt.compare(password, foundUser.password);
+
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: 'Invalid username or password' });
+    }
+
+    // Generate a token and set a cookie for the authenticated user
+    generateTokenAndSetCookie(foundUser._id, res);
+
+    // Respond with user details
+    return res.status(200).json({
+      _id: foundUser._id,
+      name: foundUser.name,
+      email: foundUser.email,
+      username: foundUser.username,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log('Error in loginUser: ', error.message);
+  }
+};
+export default { signupUser, loginUser };
