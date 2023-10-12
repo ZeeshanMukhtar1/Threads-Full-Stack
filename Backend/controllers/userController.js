@@ -1,7 +1,6 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt'; // Importing bcrypt for password hashing
 import generateTokenAndSetCookie from '../utills/helpers/generateTokenAndSetCookie.js';
-
 const signupUser = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
@@ -95,4 +94,38 @@ const logoutUser = (req, res) => {
   }
 };
 
-export default { signupUser, loginUser, logoutUser };
+const followUnfollowUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToModify = await User.findById(id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (id === req.user._id) {
+      return res
+        .status(400)
+        .json({ message: 'You cannot follow/unfollow yourself' });
+    }
+    if (!userToModify || !currentUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isFollowing = currentUser.following.includes(id);
+
+    if (isFollowing) {
+      // Unfollow the user
+      await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } }); // Remove the user from the following array
+      await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } }); // Remove the user from the followers array
+      res.status(200).json({ message: 'User unfollowed successfully' });
+    } else {
+      // Follow the user
+      await User.findByIdAndUpdate(req.user._id, { $push: { following: id } }); // Add the user to the following array
+      await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } }); // Add the user to the followers array
+      res.status(200).json({ message: 'User followed successfully' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log('Error in follow/unfollow: ', error.message);
+  }
+};
+
+export default { signupUser, loginUser, logoutUser, followUnfollowUser };
