@@ -51,11 +51,15 @@ const loginUser = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Query the User model from the database, using a different variable name
+    // Query the User model from the database
     const foundUser = await User.findOne({ username: username });
 
     if (!foundUser) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res
+        .status(400)
+        .json({
+          message: 'This user does not exist. Please create a new account.',
+        });
     }
 
     // Check if the password matches the hashed password in the database
@@ -80,4 +84,5 @@ const loginUser = async (req, res) => {
     console.log('Error in loginUser: ', error.message);
   }
 };
+
 export default { signupUser, loginUser };
