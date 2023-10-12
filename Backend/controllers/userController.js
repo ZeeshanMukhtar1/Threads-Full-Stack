@@ -55,11 +55,9 @@ const loginUser = async (req, res) => {
     const foundUser = await User.findOne({ username: username });
 
     if (!foundUser) {
-      return res
-        .status(400)
-        .json({
-          message: 'This user does not exist. Please create a new account.',
-        });
+      return res.status(400).json({
+        message: 'This user does not exist. Please create a new account.',
+      });
     }
 
     // Check if the password matches the hashed password in the database
@@ -85,4 +83,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-export default { signupUser, loginUser };
+const logoutUser = (req, res) => {
+  // clear the cookie
+  res.cookie('jwt', '', { maxAge: 0 });
+  // send a response
+  res.status(200).json({ message: 'User logged out successfully' });
+  try {
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log('Error in logoutUser: ', error.message);
+  }
+};
+
+export default { signupUser, loginUser, logoutUser };
