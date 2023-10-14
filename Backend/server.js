@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connectDB from './db/connetDB.js';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js';
+import postRoutes from './routes/postRoutes.js';
 
 // loading env variables
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(cookieParser());
 
 // Route prefix
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 // listening to port
 app.listen(PORT, () => {
