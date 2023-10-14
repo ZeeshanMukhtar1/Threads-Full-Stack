@@ -8,5 +8,6 @@ const router = express.Router();
 // Defining routes
 router.get('/:id', postController.getPost);
 router.post('/create', protectRoute, postController.createPost);
+router.delete('/:id', protectRoute, postController.deletePost);
 
 export default router;
