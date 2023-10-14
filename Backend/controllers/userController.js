@@ -1,6 +1,23 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt'; // Importing bcrypt for password hashing
 import generateTokenAndSetCookie from '../utills/helpers/generateTokenAndSetCookie.js';
+
+const getUserProfile = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const userProfile = await User.findOne({ username: username })
+      .select('-password')
+      .select('-updatedAt');
+    if (!userProfile) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ user: userProfile });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log('Error in getUserProfile: ', error.message);
+  }
+};
+
 const signupUser = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
@@ -161,10 +178,12 @@ const updateUser = async (req, res) => {
     console.log('Error in updateUser: ', error.message);
   }
 };
+
 export default {
   signupUser,
   loginUser,
   logoutUser,
   followUnfollowUser,
   updateUser,
+  getUserProfile,
 };
