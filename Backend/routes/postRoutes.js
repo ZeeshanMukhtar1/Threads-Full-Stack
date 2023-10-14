@@ -9,5 +9,6 @@ const router = express.Router();
 router.get('/:id', postController.getPost);
 router.post('/create', protectRoute, postController.createPost);
 router.delete('/:id', protectRoute, postController.deletePost);
+router.post('/like/:id', protectRoute, postController.likeUnlikePost); // if u dont have an account then u cant like or unlike a post
 
 export default router;
