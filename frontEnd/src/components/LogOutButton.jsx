@@ -3,7 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import userAtom from '../Atoms/userAtom';
 // caling function from hooks folder insted of writing it manaully again ana dagain like const toast = useToast()
 import useShowToast from '../Hooks/useShowToast';
-
+import { FiLogOut } from 'react-icons/fi';
 const LogOutButton = () => {
   const setUser = useSetRecoilState(userAtom);
   const showToast = useShowToast();
@@ -33,7 +33,7 @@ const LogOutButton = () => {
 
   return (
     <Button position={'fixed'} top={'30px'} right={'30px'} size={'sm'} onClick={handleLogout}>
-      Logout
+      <FiLogOut size={20} />
     </Button>
   );
 };

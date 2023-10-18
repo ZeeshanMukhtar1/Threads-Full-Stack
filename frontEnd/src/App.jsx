@@ -8,6 +8,7 @@ import AuthPage from './pages/AuthPage';
 import { useRecoilValue } from 'recoil';
 import userAtom from './Atoms/userAtom';
 import LogOutButton from './components/LogOutButton';
+import UserProfilePage from './pages/UserProfilePage';
 
 function App() {
   // Get the user from Recoil state
@@ -29,6 +30,7 @@ function App() {
           element={!user ? <AuthPage /> : <Navigate to="/" />}
           // If no user is logged in, show the AuthPage, otherwise navigate to the homepage
         />
+        <Route path="/update" element={user ? <UserProfilePage /> : <Navigate to="/auth" />} />
         <Route path="/:username" element={<UserPage />} />
         {/* Display UserPage for a specific username */}
         <Route path="/:username/post/:pid" element={<PostPage />} />
