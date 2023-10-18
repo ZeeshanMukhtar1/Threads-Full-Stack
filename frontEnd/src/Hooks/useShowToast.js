@@ -4,9 +4,9 @@ const useShowToast = () => {
   const toast = useToast();
   const ShowToast = (title, description, status) => {
     toast({
-      title: title,
-      description: description,
-      status: status,
+      title,
+      description,
+      status,
       duration: 3000,
       isClosable: true,
     });

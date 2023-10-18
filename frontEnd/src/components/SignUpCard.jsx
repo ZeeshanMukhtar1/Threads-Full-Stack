@@ -16,8 +16,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useResetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import authScreenAtom from '../Atoms/authAtom';
+// calling custom hook from hooks folder insted of writing it manaully again ana dagain like const toast = useToast()
 import useShowToast from '../Hooks/useShowToast';
 import userAtom from '../Atoms/userAtom';
 
@@ -35,10 +36,11 @@ export default function SignupCard() {
   });
 
   const showToast = useShowToast();
-  const setUser = useResetRecoilState(userAtom);
+  const setUser = useSetRecoilState(userAtom);
 
   const handleSignup = async () => {
     try {
+      console.log(inputs);
       // Sending a POST request to the signup API endpoint
       const res = await fetch('/api/users/signup', {
         method: 'POST',
