@@ -51,6 +51,8 @@ const signupUser = async (req, res) => {
         name: newuser.name,
         email: newuser.email,
         username: newuser.username,
+        bio: newuser.bio,
+        profilePic: newuser.profilePic,
       });
     } else {
       // If user registration fails for any reason, return an error message
@@ -92,6 +94,8 @@ const loginUser = async (req, res) => {
       name: foundUser.name,
       email: foundUser.email,
       username: foundUser.username,
+      bio: foundUser.bio,
+      profilePic: foundUser.profilePic,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
