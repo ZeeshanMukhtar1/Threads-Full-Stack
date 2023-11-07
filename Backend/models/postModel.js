@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Define the structure of a Post document in MongoDB
 const postSchema = mongoose.Schema(
@@ -6,7 +6,7 @@ const postSchema = mongoose.Schema(
     // Reference to the user who posted this post
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // Refers to the 'User' model
+      ref: "User", // Refers to the 'User' model
       required: true,
     },
 
@@ -25,34 +25,29 @@ const postSchema = mongoose.Schema(
     likes: {
       // array of user ids
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'User',
+      ref: "User",
       default: [],
     },
 
     // Array of replies to the post
     replies: [
       {
-        // Reference to the user who made the reply
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User', // Refers to the 'User' model
+          ref: "User",
           required: true,
         },
-
-        // Text content of the reply (up to 500 characters)
         text: {
           type: String,
           required: true,
         },
-
-        // URL of the user's profile picture (optional)
-        userProfilePic: {
+        profilepic: {
           type: String,
+          required: false,
         },
-
-        // User's name who made the reply (optional)
-        userName: {
+        username: {
           type: String,
+          required: false,
         },
       },
     ],
@@ -65,6 +60,6 @@ const postSchema = mongoose.Schema(
 );
 
 // Create a 'Post' model from the schema
-const Post = mongoose.model('Post', postSchema);
+const Post = mongoose.model("Post", postSchema);
 
 export default Post;
