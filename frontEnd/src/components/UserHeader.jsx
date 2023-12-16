@@ -16,7 +16,7 @@ import { BsInstagram } from 'react-icons/bs';
 import { CgMoreO } from 'react-icons/cg';
 import '../../styles/global.scss';
 
-const UserHeader = () => {
+const UserHeader = ({ user }) => {
   // Initialize the toast notification system
   const toast = useToast();
 
@@ -46,11 +46,11 @@ const UserHeader = () => {
             }}
             fontWeight={'bold'}
           >
-            Mark Zuckerberg
+            {user.name}
           </Text>
           <Flex gap={2} alignItems={'center'}>
             {/* User's username */}
-            <Text fontSize={'sm'}>Zuc1122</Text>
+            <Text fontSize={'sm'}>{user.username}</Text>
             {/* User's organization or label */}
             <Text
               fontSize={{
@@ -69,25 +69,38 @@ const UserHeader = () => {
         </Box>
         <Box>
           {/* User's avatar */}
-          <Avatar
-            size={{
-              base: 'md',
-              md: 'lg',
-              lg: 'xl',
-            }}
-            name={'Mark Zuckerberg'}
-            src="/zuck-avatar.png"
-          />
+          {user.profilepic && (
+            <Avatar
+              size={{
+                base: 'md',
+                md: 'lg',
+                lg: 'xl',
+              }}
+              name={user.name}
+              src={user.profilepic}
+            />
+          )}
+          {!user.profilepic && (
+            <Avatar
+              size={{
+                base: 'md',
+                md: 'lg',
+                lg: 'xl',
+              }}
+              name={user.name}
+              src="https://bit.ly/broken-link"
+            />
+          )}
         </Box>
       </Flex>
 
       {/* User's bio */}
-      <Text>Co-founder and CEO of Facebook, American media magnate, internet entrepreneur, and philanthropist.</Text>
+      <Text>{user.bio}</Text>
 
       <Flex width={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
           {/* User's follower count */}
-          <Text color={'gray.light'}>9M Followers</Text>
+          <Text color={'gray.light'}>{user.followers.length} Followers</Text>
           {/* Separator */}
           <Box w="1" h="1" bg={'gray.light'} borderRadius={'full'}></Box>
           {/* Link to user's Instagram profile */}
