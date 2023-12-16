@@ -10,15 +10,26 @@ import {
   MenuList,
   MenuItem,
   useToast,
+  Button,
+  Link,
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { BsInstagram } from 'react-icons/bs';
 import { CgMoreO } from 'react-icons/cg';
 import '../../styles/global.scss';
+import userAtom from '../Atoms/userAtom';
+import { useRecoilValue } from 'recoil';
+import { useState } from 'react';
+import useShowToast from '../hooks/useShowToast';
 
 const UserHeader = ({ user }) => {
   // Initialize the toast notification system
   const toast = useToast();
+  const currentUser = useRecoilValue(userAtom); // Get the current user from the global state
+  const [following, setfollowing] = useState(user.followers.includes(currentUser._id));
+  const [updating, setupdating] = useState(false);
+  console.log(following);
+  const showToast = useShowToast();
 
   // Function to copy the current URL to the clipboard
   const copyUrl = () => {
@@ -33,6 +44,39 @@ const UserHeader = ({ user }) => {
     });
   };
 
+  const handleFollowUnfollow = async () => {
+    if (!currentUser) {
+      showToast('Error', 'Please login to follow', 'error');
+      return;
+    }
+    setupdating(true);
+    try {
+      const res = await fetch(`/api/users/follow/${user._id}`, {
+        method: 'Post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast('Error', data.error, 'error');
+        return;
+      }
+      if (following) {
+        showToast('Success', 'Unfollowed', 'success');
+        user.followers.pop(currentUser._id); // Remove the current user from the followers array
+      } else {
+        showToast('Success', 'Followed', 'success');
+        user.followers.push(currentUser._id); // Add the current user to the followers array
+      }
+      setfollowing(!following);
+    } catch (error) {
+      showToast('Error', error, 'error');
+    } finally {
+      setupdating(false);
+    }
+  };
   return (
     <VStack gap={4} alignItems={'start'}>
       <Flex justifyContent={'space-between'} w={'full'}>
@@ -96,6 +140,17 @@ const UserHeader = ({ user }) => {
 
       {/* User's bio */}
       <Text>{user.bio}</Text>
+      {/* update btn  */}
+      {currentUser._id === user._id && (
+        <Link as={RouterLink} to="/update">
+          <Button size={'sm'}>Update Profile</Button>
+        </Link>
+      )}
+      {currentUser._id !== user._id && (
+        <Button onClick={handleFollowUnfollow} size={'sm'} isLoading={updating}>
+          {following ? 'Unfollow' : 'Follow'}
+        </Button>
+      )}
 
       <Flex width={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
