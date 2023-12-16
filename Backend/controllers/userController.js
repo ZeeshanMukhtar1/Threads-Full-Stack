@@ -1,20 +1,22 @@
-import User from "../models/userModel.js";
-import bcrypt from "bcrypt"; // Importing bcrypt for password hashing
-import generateTokenAndSetCookie from "../utills/helpers/generateTokenAndSetCookie.js";
+import User from '../models/userModel.js';
+import bcrypt from 'bcrypt'; // Importing bcrypt for password hashing
+import generateTokenAndSetCookie from '../utills/helpers/generateTokenAndSetCookie.js';
+
+import { v2 as cloudinary } from 'cloudinary';
 
 const getUserProfile = async (req, res) => {
   const { username } = req.params;
   try {
     const userProfile = await User.findOne({ username: username })
-      .select("-password")
-      .select("-updatedAt");
+      .select('-password')
+      .select('-updatedAt');
     if (!userProfile) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
     res.status(200).json({ user: userProfile });
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log("Error in getUserProfile: ", error.message);
+    console.log('Error in getUserProfile: ', error.message);
   }
 };
 
@@ -26,7 +28,7 @@ const signupUser = async (req, res) => {
       $or: [{ email: email }, { username: username }],
     });
     if (user) {
-      return res.status(400).json({ error: "User already exists" }); // Return early if user exists
+      return res.status(400).json({ error: 'User already exists' }); // Return early if user exists
     }
 
     // Generate a salt and hash the password
@@ -40,7 +42,7 @@ const signupUser = async (req, res) => {
       username,
       password: hashedPassword,
       profilepic, // Include the profile picture in the user object
-      bio
+      bio,
     });
 
     // Save the new user to the database
@@ -58,11 +60,11 @@ const signupUser = async (req, res) => {
       });
     } else {
       // If user registration fails for any reason, return an error message
-      return res.status(400).json({ error: "Invalid user data" });
+      return res.status(400).json({ error: 'Invalid user data' });
     }
   } catch (error) {
     // Handle server errors and send an error response
-    console.log("Error in signupUser: ", error.message);
+    console.log('Error in signupUser: ', error.message);
     return res.status(500).json({ error: error.message });
   }
 };
@@ -76,7 +78,7 @@ const loginUser = async (req, res) => {
 
     if (!foundUser) {
       return res.status(400).json({
-        error: "This user does not exist. Please create a new account.",
+        error: 'This user does not exist. Please create a new account.',
       });
     }
 
@@ -84,7 +86,7 @@ const loginUser = async (req, res) => {
     const isPasswordMatch = await bcrypt.compare(password, foundUser.password);
 
     if (!isPasswordMatch) {
-      return res.status(400).json({ error: "Invalid username or password" });
+      return res.status(400).json({ error: 'Invalid username or password' });
     }
 
     // Generate a token and set a cookie for the authenticated user
@@ -101,19 +103,19 @@ const loginUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log("Error in loginUser: ", error.message);
+    console.log('Error in loginUser: ', error.message);
   }
 };
 
 const logoutUser = (req, res) => {
   // clear the cookie
-  res.cookie("jwt", "", { maxAge: 0 });
+  res.cookie('jwt', '', { maxAge: 0 });
   // send a response
-  res.status(200).json({ message: "User logged out successfully" });
+  res.status(200).json({ message: 'User logged out successfully' });
   try {
   } catch (error) {
     res.status(500).json({ message: error.message });
-    console.log("Error in logoutUser: ", error.message);
+    console.log('Error in logoutUser: ', error.message);
   }
 };
 
@@ -127,11 +129,11 @@ const followUnfollowUser = async (req, res) => {
     if (id === req.user._id.toString()) {
       return res
         .status(400)
-        .json({ error: "You cannot follow/unfollow yourself" });
+        .json({ error: 'You cannot follow/unfollow yourself' });
     }
 
     if (!userToModify || !currentUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const isFollowing = currentUser.following.includes(id);
@@ -140,31 +142,33 @@ const followUnfollowUser = async (req, res) => {
       // Unfollow the user
       await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } }); // Remove the user from the following array
       await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } }); // Remove the user from the followers array
-      res.status(200).json({ message: "User unfollowed successfully" });
+      res.status(200).json({ message: 'User unfollowed successfully' });
     } else {
       // Follow the user
       await User.findByIdAndUpdate(req.user._id, { $push: { following: id } }); // Add the user to the following array
       await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } }); // Add the user to the followers array
-      res.status(200).json({ message: "User followed successfully" });
+      res.status(200).json({ message: 'User followed successfully' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log("Error in follow/unfollow: ", error.message);
+    console.log('Error in follow/unfollow: ', error.message);
   }
 };
 
 const updateUser = async (req, res) => {
-  const { name, email, username, password, bio, profilePic } = req.body;
+  const { name, email, username, password, bio } = req.body;
+  let { profilePic } = req.body;
+
   const userID = req.user._id;
   try {
     let user = await User.findById(userID);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: 'User not found' });
     }
     if (req.params.id !== userID.toString()) {
       return res
         .status(401)
-        .json({ error: "You are not authorized to update this user" });
+        .json({ error: 'You are not authorized to update this user' });
     }
 
     if (password) {
@@ -172,16 +176,32 @@ const updateUser = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, salt);
       user.password = hashedPassword;
     }
+
+    if (profilePic) {
+      if (user.profilePic) {
+        await cloudinary.uploader.destroy(
+          user.profilePic.split('/').pop().split('.')[0]
+        );
+      }
+
+      const uploadedResponse = await cloudinary.uploader.upload(profilePic);
+      profilePic = uploadedResponse.secure_url;
+    }
+
     user.name = name || user.name;
     user.email = email || user.email;
     user.username = username || user.username;
     user.bio = bio || user.bio;
     user.profilePic = profilePic || user.profilePic;
     user = await user.save();
-    res.status(200).json({ message: "User updated successfully", user });
+
+    //  pass shoud not be revealed
+    user.password = null;
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log("Error in updateUser: ", error.message);
+    console.log('Error in updateUser: ', error.message);
   }
 };
 
