@@ -24,6 +24,7 @@ import userAtom from '../Atoms/userAtom';
 export default function LoginCard() {
   const [showPassword, setShowPassword] = useState(false);
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+  const [loading, setloading] = useState(false);
   const setUser = useSetRecoilState(userAtom);
   const [inputs, setInputs] = useState({
     username: '',
@@ -33,6 +34,12 @@ export default function LoginCard() {
   const showToast = useShowToast(); // Initialize the Toast component
 
   const handleLogin = async () => {
+    setloading(true);
+    if (inputs.username === '' || inputs.password === '') {
+      showToast('Error', 'Please fill all the fields', 'error');
+      setloading(false);
+      return;
+    }
     try {
       console.log(inputs);
       const res = await fetch('/api/users/login', {
@@ -51,10 +58,12 @@ export default function LoginCard() {
 
       localStorage.setItem('user-threads', JSON.stringify(data));
       setUser(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.log(error.message);
       showToast('Error', error, 'error');
+    } finally {
+      setloading(false);
     }
   };
 
@@ -105,6 +114,7 @@ export default function LoginCard() {
                   bg: useColorModeValue('gray.700', 'gray.800'),
                 }}
                 onClick={handleLogin}
+                isLoading={loading}
               >
                 Login
               </Button>
