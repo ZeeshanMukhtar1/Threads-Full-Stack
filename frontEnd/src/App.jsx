@@ -9,6 +9,7 @@ import { useRecoilValue } from 'recoil';
 import userAtom from './Atoms/userAtom';
 import LogOutButton from './components/LogOutButton';
 import UpdateProfilePage from './pages/UpdateProfilePage';
+import CreatePost from './components/CreatePost';
 
 function App() {
   // Get the user from Recoil state
@@ -38,6 +39,9 @@ function App() {
       </Routes>
       {user && <LogOutButton />}
       {/* If a user is logged in, display the LogOutButton */}
+      {/* uf we have a user then he can cretae a post */}
+      {user && <LogOutButton />}
+      {user && <CreatePost />}
     </Container>
   );
 }
