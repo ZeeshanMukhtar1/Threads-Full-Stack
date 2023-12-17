@@ -13,14 +13,17 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import userAtom from '../atoms/userAtom';
+// import userAtom from '../atoms/userAtom';
+import userAtom from '../Atoms/userAtom';
 import { useRecoilState } from 'recoil';
 import usePreviewImg from '../Hooks/usePreviewImg';
-import showToast from '../Hooks/useShowToast';
-import useShowToast from '../Hooks/useShowToast';
+import useShowToast from '../hooks/useShowToast';
+// import showToast from '../Hooks/useShowToast';
+// import useShowToast from '../Hooks/useShowToast.js';
 
 export default function UserProfilePage() {
   const [user, setUser] = useRecoilState(userAtom);
+  const [updating, setupdating] = useState(false);
   const [inputs, setInputs] = useState({
     fullName: user.name,
     userName: user.username,
@@ -35,6 +38,8 @@ export default function UserProfilePage() {
   const { handleImageChange, imgUrl } = usePreviewImg();
 
   const handlesubmit = async (e) => {
+    if (updating) return;
+    setupdating(true);
     e.preventDefault();
     try {
       // console.log(inputs);
@@ -57,6 +62,8 @@ export default function UserProfilePage() {
       localStorage.setItem('user-threads', JSON.stringify(data));
     } catch (error) {
       showToast('Error', error, 'error');
+    } finally {
+      setupdating(false);
     }
   };
 
@@ -155,6 +162,7 @@ export default function UserProfilePage() {
               Cancel
             </Button>
             <Button
+              isLoading={updating}
               bg={'green.400'}
               color={'white'}
               w="full"

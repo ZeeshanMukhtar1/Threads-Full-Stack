@@ -49,6 +49,9 @@ const UserHeader = ({ user }) => {
       showToast('Error', 'Please login to follow', 'error');
       return;
     }
+
+    // If the user is already updating, return early to prevent multiple requests from being sent
+    if (updating) return;
     setupdating(true);
     try {
       const res = await fetch(`/api/users/follow/${user._id}`, {
