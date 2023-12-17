@@ -128,7 +128,7 @@ export default function SignupCard() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
+                loadingText="Signing up..."
                 size="lg"
                 bg={useColorModeValue('gray.600', 'gray.700')}
                 color={'white'}

@@ -28,7 +28,7 @@ const UserHeader = ({ user }) => {
   const currentUser = useRecoilValue(userAtom); // Get the current user from the global state
   const [following, setfollowing] = useState(user.followers.includes(currentUser._id));
   const [updating, setupdating] = useState(false);
-  console.log(following);
+  // console.log(following);
   const showToast = useShowToast();
 
   // Function to copy the current URL to the clipboard

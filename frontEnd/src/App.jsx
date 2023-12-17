@@ -14,7 +14,7 @@ import CreatePost from './components/CreatePost';
 function App() {
   // Get the user from Recoil state
   const user = useRecoilValue(userAtom);
-  console.log(user);
+  // console.log(user);
 
   return (
     <Container maxW="620px">
