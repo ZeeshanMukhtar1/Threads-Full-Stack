@@ -41,7 +41,7 @@ export default function LoginCard() {
       return;
     }
     try {
-      console.log(inputs);
+      // console.log(inputs);
       const res = await fetch('/api/users/login', {
         method: 'POST',
         headers: {
