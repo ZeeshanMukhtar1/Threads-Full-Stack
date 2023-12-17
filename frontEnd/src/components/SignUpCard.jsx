@@ -24,6 +24,7 @@ import userAtom from '../Atoms/userAtom';
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setloading] = useState(false);
 
   // Using the useResetRecoilState hook to reset the authScreenAtom to its default value
   const setAuthScreen = useResetRecoilState(authScreenAtom);
@@ -39,6 +40,7 @@ export default function SignupCard() {
   const setUser = useSetRecoilState(userAtom);
 
   const handleSignup = async () => {
+    setloading(true);
     try {
       console.log(inputs);
       // Sending a POST request to the signup API endpoint
@@ -64,6 +66,8 @@ export default function SignupCard() {
     } catch (error) {
       // If there's an error, show a toast with the error message
       showToast('Error', error.message, 'error');
+    } finally {
+      setloading(false);
     }
   };
 
@@ -132,6 +136,7 @@ export default function SignupCard() {
                   bg: useColorModeValue('gray.700', 'gray.800'),
                 }}
                 onClick={handleSignup}
+                isLoading={loading}
               >
                 Sign up
               </Button>
