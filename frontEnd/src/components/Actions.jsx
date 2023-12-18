@@ -1,4 +1,19 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { useRecoilValue } from 'recoil';
@@ -9,7 +24,11 @@ const Actions = ({ post: post_ }) => {
     post_.likes.includes(useRecoilValue(userAtom)?._id), // Check if the current user has liked the post
   );
   const [post, setpost] = useState(post_);
+  const [isReplying, setisReplying] = useState(false);
+  const [loading, setloading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLiking, setisLiking] = useState(false);
+  const [reply, setreply] = useState('');
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
 
@@ -47,6 +66,34 @@ const Actions = ({ post: post_ }) => {
     }
   };
 
+  const handleReply = async () => {
+    if (!user) return useShowToast('Error', 'You must be logged in to like a post', 'error');
+    if (isReplying) return;
+    setisReplying(true);
+    try {
+      const res = await fetch('/api/posts/reply/' + post._id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: reply }),
+      });
+      const data = await res.json();
+      if (data.error) return showToast('Error', data.error, 'error');
+      // if (reply.length < 1) return showToast('Error', 'Reply cannot be empty', 'error');
+      setpost({ ...post, replies: [...post.replies, data.reply] });
+      showToast('Success', 'Reply posted successfully', 'success');
+      console.log(data);
+      onClose();
+      setreply('');
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    } finally {
+      setisReplying(false);
+      onClose();
+      setreply('');
+    }
+  };
   return (
     <Flex flexDirection={'column'}>
       <Flex gap={3} my={2} onClick={(e) => e.preventDefault()}>
@@ -75,7 +122,7 @@ const Actions = ({ post: post_ }) => {
           role="img"
           viewBox="0 0 24 24"
           width="20"
-          onClick={(e) => e.preventDefault()} // Prevent default behavior
+          onClick={onOpen}
         >
           <title>Comment</title>
           <path
@@ -99,6 +146,31 @@ const Actions = ({ post: post_ }) => {
           {post.likes.length} Likes
         </Text>
       </Flex>
+      {/* model */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Reply to a thread</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <Input
+                placeholder="Reply goes here..."
+                value={reply}
+                onChange={(e) => {
+                  setreply(e.target.value);
+                }}
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} size={'sm'} onClick={handleReply} isLoading={isReplying}>
+              Reply
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
@@ -106,23 +178,24 @@ const Actions = ({ post: post_ }) => {
 export default Actions;
 
 const RepostSvg = () => {
-  return;
-  <svg
-    aria-label="Repost"
-    color="currentColor"
-    fill="currentColor"
-    height="20"
-    role="img"
-    viewBox="0 0 24 24"
-    width="20"
-    onClick={(e) => e.preventDefault()} // Prevent default behavior
-  >
-    <title>Repost</title>
-    <path
-      fill=""
-      d="M19.998 9.497a1 1 0 0 0-1 1v4.228a3.274 3.274 0 0 1-3.27 3.27h-5.313l1.791-1.787a1 1 0 0 0-1.412-1.416L7.29 18.287a1.004 1.004 0 0 0-.294.707v.001c0 .023.012.042.013.065a.923.923 0 0 0 .281.643l3.502 3.504a1 1 0 0 0 1.414-1.414l-1.797-1.798h5.318a5.276 5.276 0 0 0 5.27-5.27v-4.228a1 1 0 0 0-1-1Zm-6.41-3.496-1.795 1.795a1 1 0 1 0 1.414 1.414l3.5-3.5a1.003 1.003 0 0 0 0-1.417l-3.5-3.5a1 1 0 0 0-1.414 1.414l1.794 1.794H8.27A5.277 5.277 0 0 0 3 9.271V13.5a1 1 0 0 0 2 0V9.271a3.275 3.275 0 0 1 3.271-3.27Z"
-    ></path>
-  </svg>;
+  return (
+    <svg
+      aria-label="Repost"
+      color="currentColor"
+      fill="currentColor"
+      height="20"
+      role="img"
+      viewBox="0 0 24 24"
+      width="20"
+      onClick={(e) => e.preventDefault()} // Prevent default behavior
+    >
+      <title>Repost</title>
+      <path
+        fill=""
+        d="M19.998 9.497a1 1 0 0 0-1 1v4.228a3.274 3.274 0 0 1-3.27 3.27h-5.313l1.791-1.787a1 1 0 0 0-1.412-1.416L7.29 18.287a1.004 1.004 0 0 0-.294.707v.001c0 .023.012.042.013.065a.923.923 0 0 0 .281.643l3.502 3.504a1 1 0 0 0 1.414-1.414l-1.797-1.798h5.318a5.276 5.276 0 0 0 5.27-5.27v-4.228a1 1 0 0 0-1-1Zm-6.41-3.496-1.795 1.795a1 1 0 1 0 1.414 1.414l3.5-3.5a1.003 1.003 0 0 0 0-1.417l-3.5-3.5a1 1 0 0 0-1.414 1.414l1.794 1.794H8.27A5.277 5.277 0 0 0 3 9.271V13.5a1 1 0 0 0 2 0V9.271a3.275 3.275 0 0 1 3.271-3.27Z"
+      ></path>
+    </svg>
+  );
 };
 
 const ShareSvg = () => {
