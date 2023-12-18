@@ -3,17 +3,32 @@ import bcrypt from 'bcrypt'; // Importing bcrypt for password hashing
 import generateTokenAndSetCookie from '../utills/helpers/generateTokenAndSetCookie.js';
 
 import { v2 as cloudinary } from 'cloudinary';
+import mongoose from 'mongoose';
 
 const getUserProfile = async (req, res) => {
-  const { username } = req.params;
+  // we wil fetch user proifile either with usrrname or userid
+  // query is either username or userid
+  const { query } = req.params;
+
   try {
-    const userProfile = await User.findOne({ username: username })
-      .select('-password')
-      .select('-updatedAt');
-    if (!userProfile) {
-      return res.status(404).json({ message: 'User not found' });
+    let user;
+    // if qury is userd
+    if (mongoose.Types.ObjectId.isValid(query)) {
+      user = await user
+        .findOne({ _id: query })
+        .select('-password')
+        .select('-updatedAt');
+    } else {
+      // query is username
+      user = await User.findOne({ username: query })
+        .select('-password')
+        .select('-updatedAt');
     }
-    res.status(200).json({ user: userProfile });
+
+    if (!User) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({ user: user });
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log('Error in getUserProfile: ', error.message);
