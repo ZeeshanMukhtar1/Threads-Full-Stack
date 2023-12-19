@@ -17,16 +17,16 @@ import { Link as RouterLink } from 'react-router-dom';
 import { BsInstagram } from 'react-icons/bs';
 import { CgMoreO } from 'react-icons/cg';
 import '../../styles/global.scss';
-import userAtom from '../Atoms/userAtom';
 import { useRecoilValue } from 'recoil';
 import { useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
+import userAtom from '../atoms/userAtom';
 
 const UserHeader = ({ user }) => {
   // Initialize the toast notification system
   const toast = useToast();
   const currentUser = useRecoilValue(userAtom); // Get the current user from the global state
-  const [following, setfollowing] = useState(user.followers.includes(currentUser._id));
+  const [following, setfollowing] = useState(user.followers.includes(currentUser?._id));
   const [updating, setupdating] = useState(false);
   // console.log(following);
   const showToast = useShowToast();
@@ -68,10 +68,10 @@ const UserHeader = ({ user }) => {
       }
       if (following) {
         showToast('Success', 'Unfollowed', 'success');
-        user.followers.pop(currentUser._id); // Remove the current user from the followers array
+        user.followers.pop(currentUser?._id); // Remove the current user from the followers array
       } else {
         showToast('Success', 'Followed', 'success');
-        user.followers.push(currentUser._id); // Add the current user to the followers array
+        user.followers.push(currentUser?._id); // Add the current user to the followers array
       }
       setfollowing(!following);
     } catch (error) {
@@ -144,12 +144,12 @@ const UserHeader = ({ user }) => {
       {/* User's bio */}
       <Text>{user.bio}</Text>
       {/* update btn  */}
-      {currentUser._id === user._id && (
+      {currentUser?._id === user._id && (
         <Link as={RouterLink} to="/update">
           <Button size={'sm'}>Update Profile</Button>
         </Link>
       )}
-      {currentUser._id !== user._id && (
+      {currentUser?._id !== user._id && (
         <Button onClick={handleFollowUnfollow} size={'sm'} isLoading={updating}>
           {following ? 'Unfollow' : 'Follow'}
         </Button>
