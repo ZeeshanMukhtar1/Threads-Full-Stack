@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { set } from 'date-fns';
 import useShowToast from '../hooks/useShowToast';
+import Post from '../components/Post';
 
 const UserPage = () => {
   const showToast = useShowToast();
@@ -77,6 +78,17 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
+      {!fetchingPosts && posts.length === 0 && <h1> No posts yet</h1>}
+
+      {fetchingPosts && (
+        <Flex justifyContent={'center'} my={'12'}>
+          <Spinner size={'xl'} />
+        </Flex>
+      )}
+
+      {posts.map((post) => (
+        <Post key={post._id} post={post} postedBy={post.postedBy} />
+      ))}
     </>
   );
 };
