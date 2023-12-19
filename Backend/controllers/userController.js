@@ -6,26 +6,24 @@ import { v2 as cloudinary } from 'cloudinary';
 import mongoose from 'mongoose';
 
 const getUserProfile = async (req, res) => {
-  // we wil fetch user proifile either with usrrname or userid
-  // query is either username or userid
   const { query } = req.params;
 
   try {
     let user;
-    // if qury is userd
+
     if (mongoose.Types.ObjectId.isValid(query)) {
-      user = await user
-        .findOne({ _id: query })
+      // Changed 'user' to 'User'
+      user = await User.findOne({ _id: query })
         .select('-password')
         .select('-updatedAt');
     } else {
-      // query is username
       user = await User.findOne({ username: query })
         .select('-password')
         .select('-updatedAt');
     }
 
-    if (!User) {
+    // Changed 'if (!User)' to 'if (!user)'
+    if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
     res.status(200).json({ user: user });
