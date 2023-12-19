@@ -8,6 +8,7 @@ const router = express.Router();
 // Defining routes
 router.get('/feed', protectRoute, postController.getFeedPosts);
 router.get('/:id', postController.getPost);
+router.get('/user/:username', postController.getUserPosts);
 router.post('/create', protectRoute, postController.createPost);
 router.delete('/:id', protectRoute, postController.deletePost);
 router.put('/like/:id', protectRoute, postController.likeUnlikePost); // if u dont have an account then u cant like or unlike a post

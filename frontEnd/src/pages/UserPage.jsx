@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // import useShowToast from '../Hooks/useShowToast';
 import { Flex, Spinner } from '@chakra-ui/react';
-import useShowToast from '../Hooks/useShowToast';
+import { set } from 'date-fns';
+import useShowToast from '../hooks/useShowToast';
 
 const UserPage = () => {
   const showToast = useShowToast();
@@ -13,6 +14,8 @@ const UserPage = () => {
   const { username } = useParams();
   // const showToast = useShowToast();
   const [loading, setloading] = useState(true);
+  const [posts, setposts] = useState([]);
+  const [fetchingPosts, setfetchingPosts] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
@@ -34,7 +37,26 @@ const UserPage = () => {
         setloading(false);
       }
     };
+
+    const getPosts = async () => {
+      console.log('username is ', username);
+      setfetchingPosts(true);
+      try {
+        const res = await fetch(`/api/posts/user/${username}`);
+        const data = await res.json();
+        console.log(data);
+        // setposts(data.posts);
+        setposts(data);
+      } catch (error) {
+        showToast('Error', error.message, 'error');
+        setposts([]);
+      } finally {
+        setfetchingPosts(false);
+      }
+    };
+
     getUser();
+    getPosts();
   }, [username, showToast]);
 
   if (!user && loading) {
@@ -55,10 +77,6 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      {/* <UserPost likes={100} replies={400} postImg="/post1.png" postTitle="Lets talk about threads" />
-      <UserPost likes={200} replies={500} postImg="/post2.png" postTitle="Nice Toturial..!" />
-      <UserPost likes={300} replies={600} postImg="/post3.png" postTitle="Elon Musk" />
-      <UserPost likes={400} replies={700} postTitle="Its a thread..!" /> */}
     </>
   );
 };
