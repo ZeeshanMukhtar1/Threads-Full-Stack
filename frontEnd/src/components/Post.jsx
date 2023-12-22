@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { formatDistanceToNow } from 'date-fns';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
@@ -28,6 +29,26 @@ const Post = ({ post, postedBy }) => {
     };
     getUser();
   }, [postedBy, showToast]);
+
+  const handleDeletePost = async (e) => {
+    try {
+      e.preventDefault();
+      if (!window.confirm('Are you sure you want to delete this post?')) return;
+
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast('Error', data.error, 'error');
+        return;
+      }
+      showToast('Success', 'Post deleted', 'success');
+      setPosts(posts.filter((p) => p._id !== post._id));
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    }
+  };
   return (
     <Link to={'/MarkZuckerberg/post/1'}>
       <Flex gap={3} mb={4} py={5}>
@@ -86,6 +107,7 @@ const Post = ({ post, postedBy }) => {
                 {formatDistanceToNow(new Date(post.createdAt))} ago{' '}
               </Text>
               {/* <BsThreeDotsVertical /> */}
+              <DeleteIcon size={20} onClick={handleDeletePost} />
             </Flex>
           </Flex>
           <Text fontSize={'sm'}>{post.text}</Text>
