@@ -6,8 +6,31 @@ import Comment from '../components/Comment';
 import useGetUserProfile from '../Hooks/useGetUserProfile';
 import { useParams } from 'react-router-dom';
 import { Spinner } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import useShowToast from '../hooks/useShowToast';
 const PostPage = () => {
   const { user, loading } = useGetUserProfile();
+  const [post, setpost] = useState(null);
+  const showToast = useShowToast();
+  const { pid } = useParams();
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const res = await fetch(`/api/posts/${pid}`);
+        const data = await res.json();
+        if (data.error) {
+          showToast('Error', error.message, 'error');
+          return;
+        }
+        console.log(data);
+        setpost(data);
+      } catch (error) {
+        showToast('Error', error.message, 'error');
+      }
+    };
+    getPosts();
+  }, [showToast, pid]);
 
   if (!user && loading) {
     return (
@@ -17,6 +40,8 @@ const PostPage = () => {
     );
   }
 
+  if (!post) return null;
+
   return (
     <>
       {/* Post Content */}
@@ -24,10 +49,14 @@ const PostPage = () => {
         <Flex>
           {/* Left Side: Author's Picture, Name, Verified Icon */}
           <Flex alignItems="center" w={'full'} gap={3}>
-            <Avatar size="md" src="https://bit.ly/dan-abramov" alt="Author" />
+            <Avatar
+              size="md"
+              src={user?.profilepic || 'https://avatars.githubusercontent.com/u/91063160?v=4'}
+              alt="Author"
+            />
             <Flex>
               <Text fontWeight="bold" fontSize="sm">
-                Mark Zuckerberg
+                {user?.username}
               </Text>
               <Image w={4} h={4} src="/verified.png" ml={2} alt="verified" />
             </Flex>
@@ -42,10 +71,12 @@ const PostPage = () => {
           </Flex>
         </Flex>
 
-        <Text my={3}>Let&apos;s talk about threads</Text>
-        <Box borderRadius={6} overflow={'hidden'} border={'1px solid '} borderColor={'gray.light'}>
-          <Image src={'/post1.png'} alt="post" w={'full'} />
-        </Box>
+        <Text my={3}>{post.text}</Text>
+        {post.img && (
+          <Box borderRadius={6} overflow={'hidden'} border={'1px solid '} borderColor={'gray.light'}>
+            <Image src={post.img} alt="post" w={'full'} />
+          </Box>
+        )}
 
         {/* Post Actions */}
         <Flex gap={3} my={3}>
@@ -55,11 +86,11 @@ const PostPage = () => {
         {/* Post Stats */}
         <Flex alignItems="center" gap={2}>
           <Text fontSize="sm" color="gray.light">
-            {200} likes
+            {post.likes.length} likes
           </Text>
           <Box w={1} h={1} bg="gray.light" borderRadius="full" />
           <Text fontSize="sm" color="gray.light">
-            100 replies
+            {post.replies.length} replies
           </Text>
         </Flex>
 
