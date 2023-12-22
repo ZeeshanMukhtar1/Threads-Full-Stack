@@ -79,8 +79,7 @@ const Post = ({ post, postedBy }) => {
                 padding={'2px'}
               />
             )}
-
-            {post.replies[1] && (
+            {post.replies[1] && post.replies[1].user && (
               <Avatar
                 size={'xs'}
                 name="test"
