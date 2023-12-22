@@ -9,11 +9,14 @@ import { formatDistanceToNow } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
+import { useParams } from 'react-router-dom';
 
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setuser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const { username } = useParams();
 
   const [currentUser, setcurrentUser] = useState(useRecoilValue(userAtom));
 
@@ -61,7 +64,7 @@ const Post = ({ post, postedBy }) => {
     }
   };
   return (
-    <Link to={`/post/${post._id}`}>
+    <Link to={`/${user?.username}/post/${post._id}`}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
           <Link to={`/${user?.username}`}>
