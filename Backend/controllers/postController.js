@@ -82,6 +82,12 @@ const deletePost = async (req, res) => {
       });
     }
 
+    // delete image from cloudinary as well
+    if (post.img) {
+      const imgId = post.img.split('/').pop().split('.')[0];
+      await cloudinary.uploader.destroy(imgId);
+    }
+
     // If the post is found, remove it
     await Post.findByIdAndRemove(req.params.id);
 

@@ -13,12 +13,14 @@ import userAtom from '../atoms/userAtom';
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setuser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [currentUser, setcurrentUser] = useState(useRecoilValue(userAtom));
 
   useEffect(() => {
     console.log('logged in user ', currentUser._id);
     const getUser = async () => {
+      setLoading(true);
       try {
         const res = await fetch('/api/users/profile/' + postedBy);
         const data = await res.json();
@@ -28,9 +30,12 @@ const Post = ({ post, postedBy }) => {
           // showToast('Error', data.error, 'error');
           return;
         }
+        setLoading(false);
+        setuser(data.user);
       } catch (error) {
         // showToast('Error', data.error, 'error');
         setuser(null);
+        setLoading(false);
       }
     };
     getUser();
@@ -56,7 +61,7 @@ const Post = ({ post, postedBy }) => {
     }
   };
   return (
-    <Link to={'/MarkZuckerberg/post/1'}>
+    <Link to={`/${user?.username}`}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
           <Avatar size={'md'} name={user?.name || 'John Doe'} src={user?.profilePic || 'https://bit.ly/dan-abramov'} />
@@ -103,9 +108,9 @@ const Post = ({ post, postedBy }) => {
         <Flex flex={1} flexDirection={'column'} gap={2}>
           <Flex justifyContent={'space-between'} w={'full'}>
             <Flex w={'full'} alignItems={'center'}>
-              <Text fontSize={'sm'} fontWeight={'bold'}>
-                {user?.username || 'Threads user '}
-              </Text>
+              <Link to={`/${user?.username}`}>
+                <Text fontWeight={'bold'}>{user?.name || 'John Doe'}</Text>
+              </Link>
               <Image src="/verified.png" alt="verified" w={4} h={4} ml={1} />
             </Flex>
             <Flex gap={4} alignItems={'center'}>
@@ -117,7 +122,7 @@ const Post = ({ post, postedBy }) => {
               {/* <DeleteIcon size={20} onClick={handleDeletePost} /> */}
               {
                 // Display the delete button only if the post belongs to the logged in user
-                currentUser._id === postedBy && <DeleteIcon size={20} onClick={handleDeletePost} />
+                currentUser?._id === postedBy && <DeleteIcon size={20} onClick={handleDeletePost} />
               }
             </Flex>
           </Flex>
