@@ -76,7 +76,7 @@ const Actions = ({ post: post_ }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: reply }),
+        body: JSON.stringify({ text: reply, user: user }),
       });
       const data = await res.json();
       if (data.error) return showToast('Error', data.error, 'error');
