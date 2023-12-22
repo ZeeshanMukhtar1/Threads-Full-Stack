@@ -61,10 +61,16 @@ const Post = ({ post, postedBy }) => {
     }
   };
   return (
-    <Link to={`/${user?.username}`}>
+    <Link to={`/post/${post._id}`}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
-          <Avatar size={'md'} name={user?.name || 'John Doe'} src={user?.profilePic || 'https://bit.ly/dan-abramov'} />
+          <Link to={`/${user?.username}`}>
+            <Avatar
+              size={'md'}
+              name={user?.name || 'John Doe'}
+              src={user?.profilePic || 'https://bit.ly/dan-abramov'}
+            />
+          </Link>
           <Box w="1px" h={'full'} bg={'gray.light'} my={2}></Box>
           <Box position={'relative'} w={'full'}>
             {post.replies.length === 0 && <Text textAlign={'center'}>🥱</Text>}
