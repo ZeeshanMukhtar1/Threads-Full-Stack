@@ -7,17 +7,23 @@ import { useEffect } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { formatDistanceToNow } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
+import { useRecoilValue } from 'recoil';
+import userAtom from '../atoms/userAtom';
 
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
   const [user, setuser] = useState(null);
 
+  const [currentUser, setcurrentUser] = useState(useRecoilValue(userAtom));
+
   useEffect(() => {
+    console.log('logged in user ', currentUser._id);
     const getUser = async () => {
       try {
         const res = await fetch('/api/users/profile/' + postedBy);
         const data = await res.json();
         console.log(data);
+        console.log('user id ', postedBy);
         if (data.error) {
           // showToast('Error', data.error, 'error');
           return;
@@ -44,7 +50,7 @@ const Post = ({ post, postedBy }) => {
         return;
       }
       showToast('Success', 'Post deleted', 'success');
-      setPosts(posts.filter((p) => p._id !== post._id));
+      setPosts(post.filter((p) => p._id !== post._id));
     } catch (error) {
       showToast('Error', error.message, 'error');
     }
@@ -107,7 +113,12 @@ const Post = ({ post, postedBy }) => {
                 {formatDistanceToNow(new Date(post.createdAt))} ago{' '}
               </Text>
               {/* <BsThreeDotsVertical /> */}
-              <DeleteIcon size={20} onClick={handleDeletePost} />
+              {/*  delete post btn */}
+              {/* <DeleteIcon size={20} onClick={handleDeletePost} /> */}
+              {
+                // Display the delete button only if the post belongs to the logged in user
+                currentUser._id === postedBy && <DeleteIcon size={20} onClick={handleDeletePost} />
+              }
             </Flex>
           </Flex>
           <Text fontSize={'sm'}>{post.text}</Text>
