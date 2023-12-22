@@ -3,9 +3,19 @@ import { BsThreeDots } from 'react-icons/bs';
 import Actions from '../components/Actions';
 import { useState } from 'react';
 import Comment from '../components/Comment';
-
+import useGetUserProfile from '../Hooks/useGetUserProfile';
+import { useParams } from 'react-router-dom';
+import { Spinner } from '@chakra-ui/react';
 const PostPage = () => {
-  const [liked, setLiked] = useState(false);
+  const { user, loading } = useGetUserProfile();
+
+  if (!user && loading) {
+    return (
+      <Flex justifyContent={'center'}>
+        <Spinner size={'xl'} />
+      </Flex>
+    );
+  }
 
   return (
     <>
@@ -39,13 +49,13 @@ const PostPage = () => {
 
         {/* Post Actions */}
         <Flex gap={3} my={3}>
-          <Actions liked={liked} setLiked={setLiked} />
+          <Actions post={post} />
         </Flex>
 
         {/* Post Stats */}
         <Flex alignItems="center" gap={2}>
           <Text fontSize="sm" color="gray.light">
-            {200 + (liked ? 1 : 0)} likes
+            {200} likes
           </Text>
           <Box w={1} h={1} bg="gray.light" borderRadius="full" />
           <Text fontSize="sm" color="gray.light">
@@ -68,34 +78,13 @@ const PostPage = () => {
       <Divider my={4} />
 
       {/* Comments */}
-      <Comment
+      {/* <Comment
         comment="Oh , this is awesome..!"
         createdAt="just Now"
         likes={220}
         useravatar="https://avatars.githubusercontent.com/u/91063160?v=4"
         userName="Zeeshan Mukhtar"
-      />
-      <Comment
-        comment="Hey , it looks great..!"
-        createdAt="1h"
-        likes={200}
-        useravatar="https://bit.ly/dan-abramov"
-        userName="John Smith"
-      />
-      <Comment
-        comment="Omg , this is awesome..!"
-        createdAt="55 Min"
-        likes={210}
-        useravatar="https://bit.ly/ryan-florence"
-        userName="John Doe"
-      />
-      <Comment
-        comment="Very nice! 👍"
-        createdAt="2h"
-        likes={220}
-        useravatar="https://bit.ly/ryan-florence"
-        userName="John Smith"
-      />
+      /> */}
     </>
   );
 };

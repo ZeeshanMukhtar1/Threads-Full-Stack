@@ -8,37 +8,17 @@ import { Flex, Spinner } from '@chakra-ui/react';
 import { set } from 'date-fns';
 import useShowToast from '../hooks/useShowToast';
 import Post from '../components/Post';
+import useGetUserProfile from '../Hooks/useGetUserProfile';
 
 const UserPage = () => {
+  const { user, loading } = useGetUserProfile();
   const showToast = useShowToast();
-  const [user, setuser] = useState(null);
   const { username } = useParams();
   // const showToast = useShowToast();
-  const [loading, setloading] = useState(true);
   const [posts, setposts] = useState([]);
   const [fetchingPosts, setfetchingPosts] = useState(true);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await fetch(`/api/users/profile/${username}`);
-        const data = await res.json();
-        setuser(data.user);
-        // console.log(data.user);
-        // console.log('API Response:', data.user); // Log the response so we can see it in the dev tools
-        if (data.error) {
-          showToast('Error', data.error, 'error');
-          return;
-        }
-        setuser(data.user);
-      } catch (error) {
-        // console.log(error);
-        showToast('Error', 'Something went wrong', 'error');
-      } finally {
-        setloading(false);
-      }
-    };
-
     const getPosts = async () => {
       console.log('username is ', username);
       setfetchingPosts(true);
@@ -56,7 +36,6 @@ const UserPage = () => {
       }
     };
 
-    getUser();
     getPosts();
   }, [username, showToast]);
 
