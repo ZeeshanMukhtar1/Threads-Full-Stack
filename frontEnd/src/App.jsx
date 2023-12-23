@@ -32,7 +32,19 @@ function App() {
           // If no user is logged in, show the AuthPage, otherwise navigate to the homepage
         />
         <Route path="/update" element={user ? <UpdateProfilePage /> : <Navigate to="/auth" />} />
-        <Route path="/:username" element={<UserPage />} />
+        <Route
+          path="/:username"
+          element={
+            user ? (
+              <>
+                <UserPage />
+                <CreatePost />
+              </>
+            ) : (
+              <UserPage />
+            )
+          }
+        />
         {/* Display UserPage for a specific username */}
         <Route path="/:username/post/:pid" element={<PostPage />} />
         {/* Display PostPage for a specific username and post ID */}
@@ -41,7 +53,6 @@ function App() {
       {/* If a user is logged in, display the LogOutButton */}
       {/* uf we have a user then he can cretae a post */}
       {user && <LogOutButton />}
-      {user && <CreatePost />}
     </Container>
   );
 }
