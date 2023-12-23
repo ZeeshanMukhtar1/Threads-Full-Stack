@@ -16,14 +16,15 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
+import postsAtom from '../Atoms/postsAtom';
 
-const Actions = ({ post: post_ }) => {
+const Actions = ({ post }) => {
   const [liked, setLiked] = useState(
-    post_.likes.includes(useRecoilValue(userAtom)?._id), // Check if the current user has liked the post
+    post.likes.includes(useRecoilValue(userAtom)?._id), // Check if the current user has liked the post
   );
-  const [post, setpost] = useState(post_);
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [isReplying, setisReplying] = useState(false);
   const [loading, setloading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,11 +51,21 @@ const Actions = ({ post: post_ }) => {
         return;
       }
       if (!liked) {
-        // add the id of acurent uswr in the like sarray
-        setpost({ ...post, likes: [...post.likes, user._id] });
+        const updatedPosts = posts.map((p) => {
+          if (p._id === post._id) {
+            return { ...p, likes: [...p.likes, user._id] };
+          }
+          return p;
+        });
+        setPosts(updatedPosts);
       } else {
-        // remove the id of acurent uswr in the like sarray
-        setpost({ ...post, likes: post.likes.filter((id) => id !== user._id) });
+        const updatedPosts = posts.map((p) => {
+          if (p._id === post._id) {
+            return { ...p, likes: p.likes.filter((id) => id !== user._id) };
+          }
+          return p;
+        });
+        setPosts(updatedPosts);
       }
 
       setLiked(!liked);
@@ -81,7 +92,13 @@ const Actions = ({ post: post_ }) => {
       const data = await res.json();
       if (data.error) return showToast('Error', data.error, 'error');
       // if (reply.length < 1) return showToast('Error', 'Reply cannot be empty', 'error');
-      setpost({ ...post, replies: [...post.replies, data.reply] });
+      const updatedPosts = posts.map((p) => {
+        if (p._id === post._id) {
+          return { ...p, replies: [...p.replies, data] };
+        }
+        return p;
+      });
+      setPosts(updatedPosts);
       showToast('Success', 'Reply posted successfully', 'success');
       console.log(data);
       onClose();
