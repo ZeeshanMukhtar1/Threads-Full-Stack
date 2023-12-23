@@ -1,6 +1,5 @@
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-// import { BsThreeDotsVertical } from 'react-icons/bs';
 import Actions from './Actions';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -21,22 +20,18 @@ const Post = ({ post, postedBy }) => {
   const [currentUser, setcurrentUser] = useState(useRecoilValue(userAtom));
 
   useEffect(() => {
-    console.log('logged in user ', currentUser._id);
     const getUser = async () => {
       setLoading(true);
       try {
         const res = await fetch('/api/users/profile/' + postedBy);
         const data = await res.json();
-        console.log(data);
-        console.log('user id ', postedBy);
+
         if (data.error) {
-          // showToast('Error', data.error, 'error');
           return;
         }
         setLoading(false);
         setuser(data.user);
       } catch (error) {
-        // showToast('Error', data.error, 'error');
         setuser(null);
         setLoading(false);
       }

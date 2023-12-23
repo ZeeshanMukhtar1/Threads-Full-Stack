@@ -20,13 +20,11 @@ const UserPage = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      console.log('username is ', username);
       setfetchingPosts(true);
       try {
         const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
-        console.log(data);
-        // setposts(data.posts);
+
         setposts(data);
       } catch (error) {
         showToast('Error', error.message, 'error');

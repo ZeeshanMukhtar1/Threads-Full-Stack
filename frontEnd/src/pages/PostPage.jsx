@@ -23,7 +23,6 @@ const PostPage = () => {
           showToast('Error', error.message, 'error');
           return;
         }
-        console.log(data);
         setpost(data);
       } catch (error) {
         showToast('Error', error.message, 'error');

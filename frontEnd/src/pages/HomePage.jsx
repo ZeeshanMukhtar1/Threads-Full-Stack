@@ -2,8 +2,6 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import Post from '../components/Post';
-// import { useRecoilState } from 'recoil';
-// import postsAtom from '../atoms/postsAtom';
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);
@@ -20,7 +18,6 @@ const HomePage = () => {
           showToast('Error', data.error, 'error');
           return;
         }
-        console.log(data);
         setPosts(data);
       } catch (error) {
         showToast('Error', error.message, 'error');
