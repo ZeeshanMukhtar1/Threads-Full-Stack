@@ -25,6 +25,7 @@ const PostPage = () => {
 
   useEffect(() => {
     const getPosts = async () => {
+      setPosts([]);
       try {
         const res = await fetch(`/api/posts/${currentPost._id}`);
         const data = await res.json();

@@ -1,16 +1,20 @@
 import { Button, Flex, Image, Link, useColorMode } from '@chakra-ui/react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { AiFillHome } from 'react-icons/ai';
 import { RxAvatar } from 'react-icons/rx';
 import { Link as routerLink } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi';
 import userAtom from '../atoms/userAtom';
 import useLogOut from '../Hooks/useLogOut';
+import setAuthScreen from '../Atoms/authAtom';
+import authScreenAtom from '../Atoms/authAtom';
 
 const Header = () => {
   // Getting the current color mode and the function to toggle it
   // this hook is from Chakra UI and it's used to get the current color mode and the function to toggle it
   const { colorMode, toggleColorMode } = useColorMode();
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
+
   const user = useRecoilValue(userAtom);
   const logOut = useLogOut();
   return (
@@ -19,6 +23,11 @@ const Header = () => {
       {user && (
         <Link as={routerLink} to="/">
           <AiFillHome size={24} />
+        </Link>
+      )}
+      {!user && (
+        <Link as={routerLink} to={'/auth'} onClick={() => setAuthScreen('login')}>
+          Login
         </Link>
       )}
       {/* Rendering an image that changes based on the current color mode */}
@@ -38,6 +47,11 @@ const Header = () => {
             <FiLogOut size={20} />
           </Button>
         </Flex>
+      )}
+      {!user && (
+        <Link as={routerLink} to={'/auth'} onClick={() => setAuthScreen('signup')}>
+          Register
+        </Link>
       )}
     </Flex>
   );
