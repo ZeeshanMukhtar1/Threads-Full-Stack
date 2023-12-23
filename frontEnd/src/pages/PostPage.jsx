@@ -122,13 +122,9 @@ const PostPage = () => {
       <Divider my={4} />
 
       {/* Comments */}
-      {/* <Comment
-        comment="Oh , this is awesome..!"
-        createdAt="just Now"
-        likes={220}
-        useravatar="https://avatars.githubusercontent.com/u/91063160?v=4"
-        userName="Zeeshan Mukhtar"
-      /> */}
+      {post.replies.map((reply) => (
+        <Comment key={reply._id} reply={reply} lastReply={reply._id === post.replies[post.replies.length - 1]._id} />
+      ))}
     </>
   );
 };
