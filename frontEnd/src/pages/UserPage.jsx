@@ -3,19 +3,19 @@ import UserPost from '../components/UserPost';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-// import useShowToast from '../Hooks/useShowToast';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { set } from 'date-fns';
 import useShowToast from '../hooks/useShowToast';
 import Post from '../components/Post';
 import useGetUserProfile from '../Hooks/useGetUserProfile';
+import { useRecoilState } from 'recoil';
+import postsAtom from '../Atoms/postsAtom';
 
 const UserPage = () => {
   const { user, loading } = useGetUserProfile();
   const showToast = useShowToast();
   const { username } = useParams();
-  // const showToast = useShowToast();
-  const [posts, setposts] = useState([]);
+  const [posts, setposts] = useRecoilState(postsAtom);
   const [fetchingPosts, setfetchingPosts] = useState(true);
 
   useEffect(() => {
@@ -35,7 +35,8 @@ const UserPage = () => {
     };
 
     getPosts();
-  }, [username, showToast]);
+  }, [username, showToast, setposts]);
+  // console.log('posts are here : ', posts);
 
   if (!user && loading) {
     return (

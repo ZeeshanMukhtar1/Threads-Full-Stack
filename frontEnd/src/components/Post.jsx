@@ -6,9 +6,10 @@ import { useEffect } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { formatDistanceToNow } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import { useParams } from 'react-router-dom';
+import postsAtom from '../Atoms/postsAtom';
 
 const Post = ({ post, postedBy }) => {
   const showToast = useShowToast();
@@ -18,6 +19,7 @@ const Post = ({ post, postedBy }) => {
   const { username } = useParams();
 
   const [currentUser, setcurrentUser] = useState(useRecoilValue(userAtom));
+  const [posts, setposts] = useRecoilState(postsAtom);
 
   useEffect(() => {
     const getUser = async () => {
@@ -53,7 +55,8 @@ const Post = ({ post, postedBy }) => {
         return;
       }
       showToast('Success', 'Post deleted', 'success');
-      setPosts(post.filter((p) => p._id !== post._id));
+      // Remove the post from the posts array
+      setposts((prev) => prev.filter((p) => p._id !== post._id));
     } catch (error) {
       showToast('Error', error.message, 'error');
     }
