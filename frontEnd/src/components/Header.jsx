@@ -1,9 +1,10 @@
-import { Flex, Image, Link, useColorMode } from '@chakra-ui/react';
+import { Button, Flex, Image, Link, useColorMode } from '@chakra-ui/react';
 import { useRecoilValue } from 'recoil';
-import userAtom from '../Atoms/userAtom';
 import { AiFillHome } from 'react-icons/ai';
 import { RxAvatar } from 'react-icons/rx';
 import { Link as routerLink } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
+import userAtom from '../atoms/userAtom';
 
 const Header = () => {
   // Getting the current color mode and the function to toggle it
@@ -28,9 +29,14 @@ const Header = () => {
         onClick={toggleColorMode}
       />
       {user && (
-        <Link as={routerLink} to={`/${user.username}`}>
-          <RxAvatar size={24} />
-        </Link>
+        <Flex alignItems={'center'} gap={4}>
+          <Link as={routerLink} to={`/${user.username}`}>
+            <RxAvatar size={24} />
+          </Link>
+          <Button size={'xs'}>
+            <FiLogOut size={20} />
+          </Button>
+        </Flex>
       )}
     </Flex>
   );

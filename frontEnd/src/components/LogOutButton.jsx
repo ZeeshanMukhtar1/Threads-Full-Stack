@@ -1,9 +1,8 @@
 import { Button } from '@chakra-ui/react';
 import { useSetRecoilState } from 'recoil';
-import userAtom from '../Atoms/userAtom';
-// caling function from hooks folder insted of writing it manaully again ana dagain like const toast = useToast()
-import useShowToast from '../Hooks/useShowToast';
 import { FiLogOut } from 'react-icons/fi';
+import userAtom from '../atoms/userAtom';
+import useShowToast from '../hooks/useShowToast';
 const LogOutButton = () => {
   const setUser = useSetRecoilState(userAtom);
   const showToast = useShowToast();
