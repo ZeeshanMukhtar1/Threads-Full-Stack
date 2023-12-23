@@ -4,15 +4,21 @@ import Actions from '../components/Actions';
 import { useState } from 'react';
 import Comment from '../components/Comment';
 import useGetUserProfile from '../Hooks/useGetUserProfile';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Spinner } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import useShowToast from '../hooks/useShowToast';
+import { formatDistanceToNow } from 'date-fns';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { useRecoilValue } from 'recoil';
+import userAtom from '../atoms/userAtom';
 const PostPage = () => {
   const { user, loading } = useGetUserProfile();
   const [post, setpost] = useState(null);
   const showToast = useShowToast();
   const { pid } = useParams();
+  const currentUser = useRecoilValue(userAtom);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getPosts = async () => {
@@ -30,6 +36,25 @@ const PostPage = () => {
     };
     getPosts();
   }, [showToast, pid]);
+
+  const handleDeletePost = async () => {
+    try {
+      if (!window.confirm('Are you sure you want to delete this post?')) return;
+
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast('Error', data.error, 'error');
+        return;
+      }
+      showToast('Success', 'Post deleted', 'success');
+      navigate(`/${user.username}`);
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    }
+  };
 
   if (!user && loading) {
     return (
@@ -62,11 +87,11 @@ const PostPage = () => {
           </Flex>
 
           {/* Right Side: Post Timing and Three Dots */}
-          <Flex alignItems="center" gap={4}>
-            <Text color="gray.light" fontSize="sm">
-              1h
+          <Flex gap={4} alignItems={'center'}>
+            <Text fontSize={'xs'} width={36} textAlign={'right'}>
+              {formatDistanceToNow(new Date(post.createdAt))} ago{' '}
             </Text>
-            <BsThreeDots />
+            {currentUser?._id === user._id && <DeleteIcon size={20} cursor={'pointer'} onClick={handleDeletePost} />}
           </Flex>
         </Flex>
 
@@ -80,17 +105,6 @@ const PostPage = () => {
         {/* Post Actions */}
         <Flex gap={3} my={3}>
           <Actions post={post} />
-        </Flex>
-
-        {/* Post Stats */}
-        <Flex alignItems="center" gap={2}>
-          <Text fontSize="sm" color="gray.light">
-            {post.likes.length} likes
-          </Text>
-          <Box w={1} h={1} bg="gray.light" borderRadius="full" />
-          <Text fontSize="sm" color="gray.light">
-            {post.replies.length} replies
-          </Text>
         </Flex>
 
         <Divider my={4} />
