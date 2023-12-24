@@ -3,6 +3,7 @@ import { Box, Button, Flex, Input, Skeleton, SkeletonCircle, Text, useColorModeV
 import React from 'react';
 import Conversation from '../components/Conversation';
 import { GiConversation } from 'react-icons/gi';
+import MessageContainer from './MessageContainer';
 
 const ChatPage = () => {
   return (
@@ -67,7 +68,7 @@ const ChatPage = () => {
           <Conversation />
           <Conversation />
         </Flex>
-        <Flex
+        {/* <Flex
           flex={70}
           borderRadius={'md'}
           p={2}
@@ -78,8 +79,9 @@ const ChatPage = () => {
         >
           <GiConversation size={100} />
           <Text fontSize={20}>Select a conversation to start chatting</Text>
-        </Flex>
+        </Flex> */}
         {/* <Flex flex={70}>Message container</Flex> */}
+        <MessageContainer />
       </Flex>
     </Box>
   );
