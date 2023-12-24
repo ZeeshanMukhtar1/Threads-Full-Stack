@@ -11,7 +11,18 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-const Conversation = () => {
+const Conversation = ({ conversation }) => {
+  const username = conversation.participants[0]?.username;
+  const lastMessage = conversation.lastMessage;
+
+  if (!username || !lastMessage) {
+    return (
+      <Flex>
+        <Text>No Conversations yet</Text>
+      </Flex>
+    );
+  }
+
   return (
     <Flex
       gap={4}
@@ -37,10 +48,10 @@ const Conversation = () => {
       </WrapItem>
       <Stack direction={'column'} fontSize={'sm'}>
         <Text fontWeight={'700'} display={'flex'} alignItems={'center'}>
-          John Doe <Image src="/verified.png" w={4} h={4} ml={1} />
+          {username} <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
         <Text fontSize={'xs'} display={'flex'} alignItems={'center'} gap={1}>
-          Hello some msg...
+          {lastMessage.text}
         </Text>
       </Stack>
     </Flex>
