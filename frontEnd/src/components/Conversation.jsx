@@ -10,8 +10,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
+import { BsCheck2All } from 'react-icons/bs';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import userAtom from '../atoms/userAtom';
+import { IoCheckmarkCircle } from 'react-icons/io5';
 
 const Conversation = ({ conversation }) => {
+  const currentUser = useRecoilValue(userAtom);
+
   const user = conversation.participants[0];
   const lastMessage = conversation.lastMessage;
 
@@ -51,6 +57,7 @@ const Conversation = ({ conversation }) => {
           {user.username} <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
         <Text fontSize={'xs'} display={'flex'} alignItems={'center'} gap={1}>
+          {currentUser._id === lastMessage.sender ? <IoCheckmarkCircle size={16} /> : ''}
           {lastMessage.text.length > 5 ? lastMessage.text.substring(0, 5) + '...' : lastMessage.text}{' '}
         </Text>
       </Stack>
