@@ -54,10 +54,25 @@ async function GetMessages(req, res) {
     const messages = await Message.find({
       conversationId: conversation._id,
     }).sort({ createdAt: 1 });
+    // +1 for ascending order and -1 for descending order
     res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-export { sendMessage, GetMessages };
+async function GetConversations(req, res) {
+  const userId = req.user._id;
+  try {
+    const conversations = await Conversation.find({
+      participants: userId,
+    }).populate({
+      path: 'participants',
+      select: 'username profilePic',
+    });
+    res.status(200).json(conversations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+export { sendMessage, GetMessages, GetConversations };
