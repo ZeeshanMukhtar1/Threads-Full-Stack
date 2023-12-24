@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import UpdateProfilePage from './pages/UpdateProfilePage';
 import CreatePost from './components/CreatePost';
 import userAtom from './atoms/userAtom';
-import ChatPage from './components/ChatPage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   // Get the user from Recoil state

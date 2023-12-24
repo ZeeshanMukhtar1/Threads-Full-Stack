@@ -3,9 +3,33 @@ import { Box, Button, Flex, Input, Skeleton, SkeletonCircle, Text, useColorModeV
 import React from 'react';
 import Conversation from '../components/Conversation';
 import { GiConversation } from 'react-icons/gi';
-import MessageContainer from './MessageContainer';
+import MessageContainer from '../components/MessageContainer';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import useShowToast from '../hooks/useShowToast';
 
 const ChatPage = () => {
+  const showToast = useShowToast();
+  const [loadingConversations, setloadingConversations] = useState(true);
+  useEffect(() => {
+    const getConversations = async () => {
+      try {
+        const res = await fetch('/api/messages/conversations');
+        const data = await res.json();
+
+        if (data.error) {
+          showToast(data.error, 'error', 'error');
+          return;
+        }
+        console.log(data);
+      } catch (error) {
+        showToast(error.message, 'error', 'error');
+      } finally {
+        setloadingConversations(false);
+      }
+    };
+    getConversations();
+  }, [showToast]);
   return (
     <Box
       position={'absolute'}
@@ -51,7 +75,7 @@ const ChatPage = () => {
               </Button>
             </Flex>
           </form>
-          {false &&
+          {loadingConversations &&
             [0, 1, 2, 3, 4].map((_, i) => (
               <Flex key={i} gap={4} alignItems={'center'} borderRadius={'md'}>
                 <Box>
@@ -63,10 +87,7 @@ const ChatPage = () => {
                 </Flex>
               </Flex>
             ))}
-
-          <Conversation />
-          <Conversation />
-          <Conversation />
+          {!loadingConversations && <Conversation />}
         </Flex>
         {/* <Flex
           flex={70}
