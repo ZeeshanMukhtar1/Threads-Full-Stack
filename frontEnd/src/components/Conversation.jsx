@@ -12,9 +12,10 @@ import {
 import React from 'react';
 import { BsCheck2All } from 'react-icons/bs';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import userAtom from '../atoms/userAtom';
+// import userAtom from '../atoms/userAtom';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import { selectedConversationAtom } from '../Atoms/messagesAtom';
+import userAtom from '../Atoms/userAtom';
 
 const Conversation = ({ conversation }) => {
   const currentUser = useRecoilValue(userAtom);
@@ -25,14 +26,10 @@ const Conversation = ({ conversation }) => {
   const lastMessage = conversation.lastMessage;
 
   if (!user || !lastMessage || lastMessage.length === 0) {
-    return (
-      <Flex>
-        <Text>No Conversations yet</Text>
-      </Flex>
-    );
+    return null;
   }
 
-  console.log('selected conversation is hsre', conversation);
+  // console.log('selected conversation is hsre', conversation);
   return (
     <Flex
       gap={4}
