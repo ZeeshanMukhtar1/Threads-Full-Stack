@@ -61,7 +61,7 @@ async function GetMessages(req, res) {
   }
 }
 
-async function GetConversations(req, res) {
+async function getConversations(req, res) {
   const userId = req.user._id;
   try {
     const conversations = await Conversation.find({
@@ -70,6 +70,7 @@ async function GetConversations(req, res) {
       path: 'participants',
       select: 'username profilePic',
     });
+
     // remove the current user from the participants array
     conversations.forEach((conversation) => {
       conversation.participants = conversation.participants.filter(
@@ -81,4 +82,4 @@ async function GetConversations(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-export { sendMessage, GetMessages, GetConversations };
+export { sendMessage, GetMessages, getConversations };

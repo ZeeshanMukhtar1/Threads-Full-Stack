@@ -12,10 +12,10 @@ import {
 import React from 'react';
 
 const Conversation = ({ conversation }) => {
-  const username = conversation.participants[0]?.username;
+  const user = conversation.participants[0];
   const lastMessage = conversation.lastMessage;
 
-  if (!username || !lastMessage) {
+  if (!user || !lastMessage || lastMessage.length === 0) {
     return (
       <Flex>
         <Text>No Conversations yet</Text>
@@ -48,7 +48,7 @@ const Conversation = ({ conversation }) => {
       </WrapItem>
       <Stack direction={'column'} fontSize={'sm'}>
         <Text fontWeight={'700'} display={'flex'} alignItems={'center'}>
-          {username} <Image src="/verified.png" w={4} h={4} ml={1} />
+          {user.username} <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
         <Text fontSize={'xs'} display={'flex'} alignItems={'center'} gap={1}>
           {lastMessage.text}
