@@ -14,9 +14,12 @@ import { BsCheck2All } from 'react-icons/bs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import { IoCheckmarkCircle } from 'react-icons/io5';
+import { selectedConversationAtom } from '../Atoms/messagesAtom';
 
 const Conversation = ({ conversation }) => {
   const currentUser = useRecoilValue(userAtom);
+  const colorMode = useColorMode();
+  const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
 
   const user = conversation.participants[0];
   const lastMessage = conversation.lastMessage;
@@ -29,6 +32,7 @@ const Conversation = ({ conversation }) => {
     );
   }
 
+  console.log('selected conversation is hsre', conversation);
   return (
     <Flex
       gap={4}
@@ -39,7 +43,16 @@ const Conversation = ({ conversation }) => {
         bg: useColorModeValue('gray.600', 'gray.dark'),
         color: 'white',
       }}
+      bg={selectedConversation._id === conversation._id ? (colorMode === 'light' ? 'gray.600' : 'gray.dark') : ''}
       borderRadius={'md'}
+      onClick={() => {
+        setselectedConversation({
+          _id: conversation._id,
+          userId: user._id,
+          username: user.username,
+          userProfilePic: user.profilePicture,
+        });
+      }}
     >
       <WrapItem>
         <Avatar
@@ -47,7 +60,7 @@ const Conversation = ({ conversation }) => {
             sm: 'sm',
             md: 'md',
           }}
-          src="https://bit.ly/broken-link"
+          src={user.profilePicture ? user.profilePicture : 'https://avatars.githubusercontent.com/u/91063160?v=4'}
         >
           <AvatarBadge boxSize="1em" bg="green.500" />
         </Avatar>
