@@ -14,6 +14,8 @@ const ChatPage = () => {
   const showToast = useShowToast();
   const [loadingConversations, setloadingConversations] = useState(true);
   const [conversations, setconversations] = useRecoilState(conversationsAtom);
+  const [searchText, setsearchText] = useState('');
+  const [searchingUser, setsearchingUser] = useState(false);
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
   useEffect(() => {
     const getConversations = async () => {
@@ -35,6 +37,11 @@ const ChatPage = () => {
     };
     getConversations();
   }, [showToast, setconversations]);
+
+  const handleConversationSearch = async (e) => {
+    e.preventDefault();
+    showToast('Searching for user', 'info', 'info');
+  };
   return (
     <Box
       position={'absolute'}
@@ -72,10 +79,10 @@ const ChatPage = () => {
           <Text fontWeight={700} color={useColorModeValue('gray.600', 'gray.400')}>
             Your conversations
           </Text>
-          <form>
+          <form onSubmit={handleConversationSearch}>
             <Flex alignItems={'center'} gap={2}>
-              <Input placeholder="search a user here" />
-              <Button size={'sm'}>
+              <Input placeholder="search a user here" onChange={(e) => setsearchText(e.target.value)} />
+              <Button size={'sm'} onClick={handleConversationSearch} isLoading={searchingUser}>
                 <Search2Icon />
               </Button>
             </Flex>
