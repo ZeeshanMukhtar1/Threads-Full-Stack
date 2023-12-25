@@ -81,7 +81,7 @@ const MessageContainer = () => {
             <Message key={message._id} message={message} OwnMessage={currentUser._id === message.sender} />
           ))}
       </Flex>
-      <MessageInput />
+      <MessageInput setMessages={setMessages} />
     </Flex>
   );
 };
