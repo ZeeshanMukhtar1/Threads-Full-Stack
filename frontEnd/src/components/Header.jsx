@@ -8,6 +8,7 @@ import userAtom from '../atoms/userAtom';
 import useLogOut from '../Hooks/useLogOut';
 import setAuthScreen from '../Atoms/authAtom';
 import authScreenAtom from '../Atoms/authAtom';
+import { IoChatbubbleEllipsesSharp } from 'react-icons/io5';
 
 const Header = () => {
   // Getting the current color mode and the function to toggle it
@@ -42,6 +43,9 @@ const Header = () => {
         <Flex alignItems={'center'} gap={4}>
           <Link as={routerLink} to={`/${user.username}`}>
             <RxAvatar size={24} />
+          </Link>
+          <Link as={routerLink} to={`/chat`}>
+            <IoChatbubbleEllipsesSharp size={20} />
           </Link>
           <Button size={'xs'} onClick={logOut}>
             <FiLogOut size={20} />
