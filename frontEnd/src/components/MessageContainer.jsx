@@ -1,5 +1,5 @@
 import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Text, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Message } from './Message';
 import { MessageInput } from './MessageInput';
 import { useEffect } from 'react';
@@ -18,6 +18,7 @@ const MessageContainer = () => {
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
   const { socket } = useSocket();
+  const messageRef = useRef();
   useEffect(() => {
     socket.on('newMessage', (message) => {
       if (selectedConversation._id === message.conversationId) {
@@ -51,6 +52,11 @@ const MessageContainer = () => {
       socket.off('newMessage');
     };
   }, [socket]);
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   useEffect(() => {
     const getMessages = async () => {
       setloadingMessages(true);
@@ -111,7 +117,13 @@ const MessageContainer = () => {
         {/* msgs */}
         {!loadingMessages &&
           messages.map((message) => (
-            <Message key={message._id} message={message} OwnMessage={currentUser._id === message.sender} />
+            <Flex
+              key={message._id}
+              direction={'column'}
+              ref={messages.length - 1 === messages.indexOf(message) ? messageRef : null}
+            >
+              <Message message={message} OwnMessage={currentUser._id === message.sender} />
+            </Flex>
           ))}
       </Flex>
       <MessageInput setMessages={setMessages} />
