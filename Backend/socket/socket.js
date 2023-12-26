@@ -18,6 +18,9 @@ const io = new Server(server, {
   },
 });
 
+export const getRecipientSocketId = (recipientId) => {
+  return userSocketMap[recipientId];
+};
 const userSocketMap = {};
 
 // Listen for a connection event for incoming sockets

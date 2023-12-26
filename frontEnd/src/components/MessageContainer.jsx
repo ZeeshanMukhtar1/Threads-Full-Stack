@@ -8,6 +8,7 @@ import { selectedConversationAtom } from '../Atoms/messagesAtom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useState } from 'react';
 import userAtom from '../Atoms/userAtom';
+import { useSocket } from '../context/SocketContext';
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -15,7 +16,15 @@ const MessageContainer = () => {
   const [loadingMessages, setloadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
-  // console.log('selectedConversation is here', selectedConversation);
+  const { socket } = useSocket();
+  useEffect(() => {
+    socket.on('newMessage', (message) => {
+      setMessages((prevMsg) => [...prevMsg, message]);
+    });
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [socket]);
   useEffect(() => {
     const getMessages = async () => {
       setloadingMessages(true);
