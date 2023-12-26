@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import io from 'socket.io-client';
@@ -10,17 +10,29 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setsocket] = useState(null);
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const user = useRecoilValue(userAtom);
 
   useEffect(() => {
-    const socket = io('http://localhost:5000', {
+    const newSocket = io('http://localhost:5000', {
       query: {
         userId: user?._id,
       },
     });
-    setsocket(socket);
-    return () => socket.close();
+
+    setSocket(newSocket);
+
+    newSocket.on('getOnlineUsers', (users) => {
+      setOnlineUsers(users);
+    });
+
+    return () => {
+      newSocket && newSocket.close();
+    };
   }, [user?._id]);
-  return <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>;
+
+  console.log('online users', onlineUsers);
+
+  return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
 };

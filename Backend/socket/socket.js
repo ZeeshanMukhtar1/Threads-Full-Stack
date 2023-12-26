@@ -18,10 +18,25 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = {};
+
 // Listen for a connection event for incoming sockets
 // When a client connects, log a message with the socket's ID
 io.on('connection', (socket) => {
   console.info('user is connected', socket.id);
+
+  const userId = socket.handshake.query.userId;
+
+  if (userId != undefined) userSocketMap[userId] = socket.id;
+
+  io.emit('getOnlineUsers', Object.keys(userSocketMap));
+
+  socket.on('disconnect', () => {
+    console.info('user is disconnected', socket.id);
+
+    delete userSocketMap[userId];
+    io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  });
 });
 
 // Export the Socket.IO server, HTTP server, and Express application for use in other modules
