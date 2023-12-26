@@ -7,10 +7,12 @@ import MessageContainer from '../components/MessageContainer';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { conversationsAtom, selectedConversationAtom } from '../Atoms/messagesAtom';
+import userAtom from '../Atoms/userAtom';
 
 const ChatPage = () => {
+  const currentuser = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const [loadingConversations, setloadingConversations] = useState(true);
   const [conversations, setconversations] = useRecoilState(conversationsAtom);
@@ -40,8 +42,28 @@ const ChatPage = () => {
 
   const handleConversationSearch = async (e) => {
     e.preventDefault();
-    showToast('Searching for user', 'info', 'info');
+    setsearchingUser(true);
+    try {
+      const res = await fetch(`/api/users/profile/${searchText}`);
+      const searchedUser = await res.json();
+      if (searchedUser.error) {
+        showToast('Error', searchedUser.error, 'error');
+        return;
+      }
+      // console.log('searched user is ', searchedUser);
+      if (searchedUser.user._id === currentuser._id) {
+        setsearchingUser(false);
+        showToast('Error', 'You cant start a conversation with yourself', 'info');
+        return;
+      }
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    } finally {
+      setsearchingUser(false);
+    }
   };
+  // console.log('currentuser is ', currentuser._id);
+
   return (
     <Box
       position={'absolute'}
