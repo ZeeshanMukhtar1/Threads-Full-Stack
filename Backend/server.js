@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
+import { app, server } from './socket/socket.js';
 
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -15,9 +16,6 @@ dotenv.config();
 
 // connecting to database
 connectDB();
-
-// initializing express app
-const app = express();
 
 // defining port
 const PORT = process.env.PORT || 5000;
@@ -42,7 +40,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/messages', messageRoutes);
 
 // listening to port
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(
     `Server is running on port ${PORT}. Open http://localhost:${PORT} to view it in the browser.`
   );

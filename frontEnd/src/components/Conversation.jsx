@@ -15,9 +15,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 // import userAtom from '../atoms/userAtom';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import { selectedConversationAtom } from '../Atoms/messagesAtom';
-import userAtom from '../Atoms/userAtom';
+import userAtom from '../atoms/userAtom';
 
-const Conversation = ({ conversation }) => {
+const Conversation = ({ conversation, isOnline }) => {
   const currentUser = useRecoilValue(userAtom);
   const colorMode = useColorMode();
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
@@ -60,7 +60,7 @@ const Conversation = ({ conversation }) => {
           }}
           src={user.profilePicture ? user.profilePicture : 'https://avatars.githubusercontent.com/u/91063160?v=4'}
         >
-          <AvatarBadge boxSize="1em" bg="green.500" />
+          {isOnline ? <AvatarBadge boxSize="1em" bg="green.500" /> : ''}
         </Avatar>
       </WrapItem>
       <Stack direction={'column'} fontSize={'sm'}>

@@ -1,21 +1,64 @@
 import { Avatar, Divider, Flex, Image, Skeleton, SkeletonCircle, Text, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Message } from './Message';
 import { MessageInput } from './MessageInput';
 import { useEffect } from 'react';
 import useShowToast from '../hooks/useShowToast';
-import { selectedConversationAtom } from '../Atoms/messagesAtom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { conversationsAtom, selectedConversationAtom } from '../Atoms/messagesAtom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import userAtom from '../Atoms/userAtom';
+import { useSocket } from '../context/SocketContext';
 
 const MessageContainer = () => {
   const showToast = useShowToast();
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
   const [loadingMessages, setloadingMessages] = useState(true);
+  const setConversations = useSetRecoilState(conversationsAtom);
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
-  // console.log('selectedConversation is here', selectedConversation);
+  const { socket } = useSocket();
+  const messageRef = useRef();
+  useEffect(() => {
+    socket.on('newMessage', (message) => {
+      // preventing sending msg to non selected conversation accedently
+      if (selectedConversation._id === message.conversationId) {
+        setMessages((prev) => [...prev, message]);
+      }
+
+      setConversations((prev) => {
+        const updatedConversations = prev.map((conversation) => {
+          // prevting sending msg to non selected conversation accedently in sidebar cht as well
+          if (conversation._id === message.conversationId) {
+            return {
+              ...conversation,
+              lastMessage: {
+                text: message.text,
+                sender: message.sender,
+              },
+            };
+          }
+          return conversation;
+        });
+        return updatedConversations;
+      });
+    });
+
+    return () => socket.off('newMessage');
+  }, [socket]);
+  useEffect(() => {
+    socket.on('newMessage', (message) => {
+      setMessages((prevMsg) => [...prevMsg, message]);
+    });
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    messageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   useEffect(() => {
     const getMessages = async () => {
       setloadingMessages(true);
@@ -76,7 +119,13 @@ const MessageContainer = () => {
         {/* msgs */}
         {!loadingMessages &&
           messages.map((message) => (
-            <Message key={message._id} message={message} OwnMessage={currentUser._id === message.sender} />
+            <Flex
+              key={message._id}
+              direction={'column'}
+              ref={messages.length - 1 === messages.indexOf(message) ? messageRef : null}
+            >
+              <Message message={message} OwnMessage={currentUser._id === message.sender} />
+            </Flex>
           ))}
       </Flex>
       <MessageInput setMessages={setMessages} />

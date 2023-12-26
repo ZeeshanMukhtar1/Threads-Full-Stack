@@ -9,6 +9,7 @@ import { useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { conversationsAtom, selectedConversationAtom } from '../Atoms/messagesAtom';
+import { useSocket } from '../context/SocketContext';
 import userAtom from '../Atoms/userAtom';
 
 const ChatPage = () => {
@@ -18,6 +19,9 @@ const ChatPage = () => {
   const [conversations, setconversations] = useRecoilState(conversationsAtom);
   const [searchText, setsearchText] = useState('');
   const [searchingUser, setsearchingUser] = useState(false);
+  const { socket, onlineUsers } = useSocket();
+  console.log('online users', onlineUsers);
+
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
   useEffect(() => {
     const getConversations = async () => {
@@ -154,7 +158,15 @@ const ChatPage = () => {
               </Flex>
             ))}
           {!loadingConversations &&
-            conversations.map((conversation) => <Conversation key={conversation._id} conversation={conversation} />)}
+            conversations.map((conversation) => (
+              <Conversation
+                key={conversation._id}
+                // isOnline={onlineUsers.includes(conversation.participants[0]._id)}
+                // isOnline={onlineUsers && onlineUsers.includes(conversation.participants[1]._id)}
+                isOnline={onlineUsers && onlineUsers.includes(conversation.participants[0]._id)}
+                conversation={conversation}
+              />
+            ))}
         </Flex>
         {!selectedConversation._id && (
           <Flex
