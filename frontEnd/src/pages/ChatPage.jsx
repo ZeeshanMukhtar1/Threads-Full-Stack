@@ -51,10 +51,24 @@ const ChatPage = () => {
         return;
       }
       // console.log('searched user is ', searchedUser);
+      // if user is trying to start a conversation with himself
       if (searchedUser.user._id === currentuser._id) {
         setsearchingUser(false);
         showToast('Error', 'You cant start a conversation with yourself', 'info');
         return;
+      }
+      const foundConversation = conversations.find((conversation) =>
+        conversation.participants.some((participant) => participant._id === searchedUser.user._id),
+      );
+      //  if conversation already exists then set it as selected conversation
+
+      if (foundConversation) {
+        setselectedConversation({
+          _id: foundConversation._id,
+          userId: searchedUser.user._id,
+          username: searchedUser.user.username,
+          userProfilePic: searchedUser.user.profilePic,
+        });
       }
     } catch (error) {
       showToast('Error', error.message, 'error');
