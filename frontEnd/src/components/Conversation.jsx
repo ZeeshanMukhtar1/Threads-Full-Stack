@@ -22,8 +22,8 @@ const Conversation = ({ conversation }) => {
   const colorMode = useColorMode();
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
 
-  const user = conversation.participants[0];
-  const lastMessage = conversation.lastMessage;
+  const user = conversation.participants ? conversation.participants[0] : undefined;
+  const lastMessage = conversation.lastMessage || {};
 
   if (!user || !lastMessage || lastMessage.length === 0) {
     return null;
@@ -48,6 +48,7 @@ const Conversation = ({ conversation }) => {
           userId: user._id,
           username: user.username,
           userProfilePic: user.profilePicture,
+          mock: conversation.mock,
         });
       }}
     >

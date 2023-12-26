@@ -70,6 +70,24 @@ const ChatPage = () => {
           userProfilePic: searchedUser.user.profilePic,
         });
       }
+
+      const mockConversation = {
+        mock: true,
+        _id: Date.now(),
+        participants: [
+          {
+            _id: searchedUser.user._id,
+            username: searchedUser.user.username,
+            profilePic: searchedUser.user.profilePic,
+          },
+        ],
+        lastMessage: {
+          text: '',
+          sender: '',
+          createdAt: new Date().toISOString(),
+        },
+      };
+      setconversations((prev) => [...prev, mockConversation]);
     } catch (error) {
       showToast('Error', error.message, 'error');
     } finally {

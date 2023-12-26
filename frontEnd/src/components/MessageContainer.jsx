@@ -15,23 +15,21 @@ const MessageContainer = () => {
   const [loadingMessages, setloadingMessages] = useState(true);
   const [messages, setMessages] = useState([]);
   const currentUser = useRecoilValue(userAtom);
-
+  // console.log('selectedConversation is here', selectedConversation);
   useEffect(() => {
     const getMessages = async () => {
       setloadingMessages(true);
       setMessages([]);
-      const res = await fetch(`/api/messages/${selectedConversation.userId}`);
-      const data = await res.json();
-
-      if (data.error) {
-        showToast(data.error, 'error', 'error');
-        return;
-      }
-
-      // console.log('my conversation', data);
-      setMessages(data);
-
       try {
+        if (selectedConversation.mock) return;
+        const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+        const data = await res.json();
+        if (data.error) {
+          showToast(data.error, 'error', 'error');
+          return;
+        }
+
+        setMessages(data);
       } catch (error) {
         showToast('error', error.Message, 'error');
       } finally {
