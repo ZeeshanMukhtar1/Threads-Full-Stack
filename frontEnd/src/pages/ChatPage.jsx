@@ -10,7 +10,7 @@ import useShowToast from '../hooks/useShowToast';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { conversationsAtom, selectedConversationAtom } from '../Atoms/messagesAtom';
 import { useSocket } from '../context/SocketContext';
-import userAtom from '../atoms/userAtom';
+import userAtom from '../Atoms/userAtom';
 
 const ChatPage = () => {
   const currentuser = useRecoilValue(userAtom);

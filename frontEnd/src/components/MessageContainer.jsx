@@ -21,12 +21,14 @@ const MessageContainer = () => {
   const messageRef = useRef();
   useEffect(() => {
     socket.on('newMessage', (message) => {
+      // preventing sending msg to non selected conversation accedently
       if (selectedConversation._id === message.conversationId) {
         setMessages((prev) => [...prev, message]);
       }
 
       setConversations((prev) => {
         const updatedConversations = prev.map((conversation) => {
+          // prevting sending msg to non selected conversation accedently in sidebar cht as well
           if (conversation._id === message.conversationId) {
             return {
               ...conversation,
