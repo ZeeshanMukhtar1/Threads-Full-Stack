@@ -23,6 +23,27 @@ const ChatPage = () => {
   console.log('online users', onlineUsers);
 
   const [selectedConversation, setselectedConversation] = useRecoilState(selectedConversationAtom);
+
+  useEffect(() => {
+    socket?.on('messageSeen', ({ conversationId }) => {
+      setconversations((prev) => {
+        const updatedConversations = prev.map((conversation) => {
+          if (conversation._id === conversationId) {
+            return {
+              ...conversation,
+              lastMessage: {
+                ...conversation.lastMessage,
+                seen: true,
+              },
+            };
+          }
+          return conversation;
+        });
+        return updatedConversations;
+      });
+    });
+  }, [socket, setconversations]);
+
   useEffect(() => {
     const getConversations = async () => {
       try {

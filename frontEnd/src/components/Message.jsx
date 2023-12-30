@@ -1,9 +1,10 @@
-import { Avatar, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react';
 
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { selectedConversationAtom } from '../Atoms/messagesAtom';
 import userAtom from '../Atoms/userAtom';
+import { BsCheck2All } from 'react-icons/bs';
 
 export const Message = ({ OwnMessage, message }) => {
   const selectedConversation = useRecoilValue(selectedConversationAtom);
@@ -14,9 +15,12 @@ export const Message = ({ OwnMessage, message }) => {
     <>
       {OwnMessage ? (
         <Flex gap={2} alignSelf={'flex-end'}>
-          <Text maxW={'350px'} p={1} bg={'blue.400'} borderRadius={'md'}>
-            {message.text}
-          </Text>
+          <Flex bg={'green.800'} maxW={'350px'} p={1} borderRadius={'md'}>
+            <Text color={'white'}>{message.text}</Text>
+            <Box alignSelf={'flex-end'} ml={1} color={message.seen ? 'black.400' : ''} fontWeight={'bold'}>
+              <BsCheck2All />
+            </Box>
+          </Flex>
           <Avatar src={user.ProfilePic || 'https://avatars.githubusercontent.com/u/91063160?v=4'} w={7} h={7} />
         </Flex>
       ) : (

@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarBadge,
+  Box,
   Flex,
   Image,
   Stack,
@@ -15,7 +16,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 // import userAtom from '../atoms/userAtom';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import { selectedConversationAtom } from '../Atoms/messagesAtom';
-import userAtom from '../atoms/userAtom';
+import userAtom from '../Atoms/userAtom';
 
 const Conversation = ({ conversation, isOnline }) => {
   const currentUser = useRecoilValue(userAtom);
@@ -68,7 +69,13 @@ const Conversation = ({ conversation, isOnline }) => {
           {user.username} <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
         <Text fontSize={'xs'} display={'flex'} alignItems={'center'} gap={1}>
-          {currentUser._id === lastMessage.sender ? <IoCheckmarkCircle size={16} /> : ''}
+          {currentUser._id === lastMessage.sender ? (
+            <Box color={lastMessage.seen ? 'blue.400' : ''}>
+              <IoCheckmarkCircle size={16} />
+            </Box>
+          ) : (
+            ''
+          )}
           {lastMessage.text.length > 5 ? lastMessage.text.substring(0, 5) + '...' : lastMessage.text}{' '}
         </Text>
       </Stack>
