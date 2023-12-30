@@ -7,6 +7,7 @@ const router = express.Router();
 
 // Defining routes
 router.get('/profile/:query', UserController.getUserProfile);
+router.get('/suggested', protectRoute, UserController.getSuggestedUsers);
 router.post('/signup', UserController.signupUser);
 router.post('/login', UserController.loginUser);
 router.post('/logout', UserController.logoutUser);
