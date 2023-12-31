@@ -18,7 +18,16 @@ function App() {
 
   return (
     <Box position={'relative'} w={'full'}>
-      <Container maxW={pathname === '/' ? '900px' : '620px'}>
+      <Container
+        maxW={
+          pathname === '/'
+            ? {
+                base: '620px',
+                md: '900px',
+              }
+            : '620px'
+        }
+      >
         <Header /> {/* Render the Header component at the top of the page */}
         <Routes>
           {/* Define application routes */}
