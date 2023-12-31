@@ -2,12 +2,33 @@ import { Flex, Skeleton, SkeletonCircle, Text, Box } from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
 import { Suggesteduser } from './Suggesteduser';
-import { useShowToast } from '../hooks/useShowToast';
+import useShowToast from '../hooks/useShowToast';
+import { useEffect } from 'react';
 
 const Suggestedusers = () => {
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
   const [suggestedUsers, setsuggestedUsers] = useState([]);
   const showToast = useShowToast();
+  useEffect(() => {
+    const getSuggestedUsers = async () => {
+      setloading(true);
+      try {
+        const res = await fetch('/api/users/suggested');
+        const data = await res.json();
+        if (data.error) {
+          showToast('error', data.error, 'Error');
+        }
+        console.log(data);
+        setsuggestedUsers(data);
+      } catch (error) {
+        showToast('error', error.message, 'Error');
+      } finally {
+        setloading(false);
+      }
+    };
+    getSuggestedUsers();
+  }, [showToast]);
+
   return (
     <>
       {/* title text */}
@@ -15,7 +36,10 @@ const Suggestedusers = () => {
         Suggested Users
       </Text>
       {/* when not loading */}
-      {!loading && [0, 1, 2, 3, 4].map((user) => <Suggesteduser key={user._id} user={user} />)}
+      {/* {!loading && suggestedUsers.map((user) => <Suggesteduser key={user._id} user={user} />)}
+       */}
+      {!loading && suggestedUsers.map((user) => <Suggesteduser key={user._id} user={user} />)}
+
       <Flex direction={'column'} gap={4}>
         {/* when loading */}
         {loading &&
