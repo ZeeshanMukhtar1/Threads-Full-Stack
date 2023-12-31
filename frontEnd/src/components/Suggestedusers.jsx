@@ -2,10 +2,12 @@ import { Flex, Skeleton, SkeletonCircle, Text, Box } from '@chakra-ui/react';
 import React from 'react';
 import { useState } from 'react';
 import { Suggesteduser } from './Suggesteduser';
+import { useShowToast } from '../hooks/useShowToast';
 
 const Suggestedusers = () => {
   const [loading, setloading] = useState(false);
   const [suggestedUsers, setsuggestedUsers] = useState([]);
+  const showToast = useShowToast();
   return (
     <>
       {/* title text */}
