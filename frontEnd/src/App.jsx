@@ -10,6 +10,7 @@ import UpdateProfilePage from './pages/UpdateProfilePage';
 import CreatePost from './components/CreatePost';
 import userAtom from './atoms/userAtom';
 import ChatPage from './pages/ChatPage';
+import { SettingsPage } from './components/SettingsPage';
 
 function App() {
   // Get the user from Recoil state
@@ -58,6 +59,7 @@ function App() {
           {/* Display UserPage for a specific username */}
           <Route path="/:username/post/:pid" element={<PostPage />} />
           <Route path="/chat" element={user ? <ChatPage /> : <Navigate to="/auth" />} />
+          <Route path="/settings" element={user ? <SettingsPage /> : <Navigate to="/auth" />} />
         </Routes>
       </Container>
     </Box>

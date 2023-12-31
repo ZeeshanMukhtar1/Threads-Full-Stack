@@ -19,7 +19,11 @@ const useGetUserProfile = () => {
           showToast('Error', data.error, 'error');
           return;
         }
-        // setuser(data.user);
+        if (data.isFrozen) {
+          setuser(null);
+          return;
+        }
+
         setuser(data.user);
       } catch (error) {
         showToast('Error', 'Something went wrong', 'error');

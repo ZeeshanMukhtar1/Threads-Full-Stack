@@ -9,6 +9,7 @@ import useLogOut from '../Hooks/useLogOut';
 import setAuthScreen from '../Atoms/authAtom';
 import authScreenAtom from '../Atoms/authAtom';
 import { IoChatbubbleEllipsesSharp } from 'react-icons/io5';
+import { MdOutlineSettings } from 'react-icons/md';
 
 const Header = () => {
   // Getting the current color mode and the function to toggle it
@@ -46,6 +47,9 @@ const Header = () => {
           </Link>
           <Link as={routerLink} to={`/chat`}>
             <IoChatbubbleEllipsesSharp size={20} />
+          </Link>
+          <Link as={routerLink} to={`/settings`}>
+            <MdOutlineSettings size={20} />
           </Link>
           <Button size={'xs'} onClick={logOut}>
             <FiLogOut size={20} />

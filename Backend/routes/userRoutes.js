@@ -14,5 +14,6 @@ router.post('/logout', UserController.logoutUser);
 router.post('/follow/:id', protectRoute, UserController.followUnfollowUser); // toggle follow/unfollow
 // router.post('/update/:id', protectRoute, UserController.updateUser);
 router.put('/update/:id', protectRoute, UserController.updateUser);
+router.put('/freeze', protectRoute, UserController.freezeAccount);
 
 export default router;
