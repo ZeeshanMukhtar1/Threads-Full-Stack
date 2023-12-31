@@ -9,6 +9,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import userAtom from '../Atoms/userAtom';
 import { useSocket } from '../context/SocketContext';
+import MessageSound from '../assets/sounds/message.mp3';
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -24,6 +25,13 @@ const MessageContainer = () => {
       // preventing sending msg to non selected conversation accedently
       if (selectedConversation._id === message.conversationId) {
         setMessages((prev) => [...prev, message]);
+      }
+
+      // playinmg the sound on new message
+      // playinmg the sound on new message
+      if (!document.hasFocus()) {
+        const audio = new Audio(MessageSound);
+        audio.play();
       }
 
       setConversations((prev) => {
