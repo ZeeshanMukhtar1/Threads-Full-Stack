@@ -32,7 +32,6 @@ const UserPage = () => {
         setFetchingPosts(false);
       }
     };
-
     getPosts();
   }, [username, showToast, setPosts, user]);
 
@@ -44,7 +43,13 @@ const UserPage = () => {
     );
   }
 
-  if (!user && !loading) return <h1>User not found</h1>;
+  if (!user && !loading)
+    return (
+      <NotFoundPage
+        text="Oops! This user seems to be missing. Maybe they froze their account?"
+        textSize={'md'}
+      />
+    );
 
   return (
     <>

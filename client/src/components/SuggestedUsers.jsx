@@ -32,7 +32,7 @@ const SuggestedUsers = () => {
 
   return (
     <>
-      <Text mb={4} fontWeight={'bold'}>
+      <Text mb={4} fontWeight={'bold'} textAlign={'center'} mx={'auto'}>
         Suggested Users
       </Text>
       {loading ? (
@@ -71,7 +71,10 @@ const SuggestedUsers = () => {
         </Flex>
       ) : (
         // Display NotFoundPage when there are no suggested users
-        <NotFoundPage text="No suggested users found!" />
+        <NotFoundPage
+          text="We're currently out of suggestions!"
+          textSize="sm"
+        />
       )}
     </>
   );

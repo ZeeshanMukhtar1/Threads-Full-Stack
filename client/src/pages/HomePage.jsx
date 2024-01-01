@@ -37,7 +37,7 @@ const HomePage = () => {
     <Flex gap="10" alignItems={'flex-start'}>
       <Box flex={70}>
         {!loading && posts.length === 0 && (
-          <NotFoundPage text="Please follow some users to see the posts!" />
+          <NotFoundPage text="Your feed is waiting for you! Follow users to see their latest posts!" />
         )}
 
         {loading && (
