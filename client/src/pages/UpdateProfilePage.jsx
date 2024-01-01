@@ -1,3 +1,4 @@
+// Importing necessary dependencies and hooks
 import {
   Button,
   Flex,
@@ -16,8 +17,11 @@ import userAtom from '../atoms/userAtom';
 import usePreviewImg from '../hooks/usePreviewImg';
 import useShowToast from '../hooks/useShowToast';
 
+// UpdateProfilePage component for handling user profile editing
 export default function UpdateProfilePage() {
+  // Recoil state for managing the user object
   const [user, setUser] = useRecoilState(userAtom);
+  // State for handling input values
   const [inputs, setInputs] = useState({
     name: user.name,
     username: user.username,
@@ -25,15 +29,21 @@ export default function UpdateProfilePage() {
     bio: user.bio,
     password: '',
   });
+  // Ref for file input
   const fileRef = useRef(null);
+  // State for handling image updating
   const [updating, setUpdating] = useState(false);
 
+  // Custom hook for displaying toasts
   const showToast = useShowToast();
 
+  // Custom hook for handling image preview
   const { handleImageChange, imgUrl } = usePreviewImg();
 
+  // Function for handling form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check if updating is already in progress
     if (updating) return;
     setUpdating(true);
     try {
@@ -58,9 +68,12 @@ export default function UpdateProfilePage() {
       setUpdating(false);
     }
   };
+
   return (
+    // Form for updating the user profile
     <form onSubmit={handleSubmit}>
       <Flex align={'center'} justify={'center'} my={6}>
+        {/* Stack for holding the form elements */}
         <Stack
           spacing={4}
           w={'full'}
@@ -70,11 +83,14 @@ export default function UpdateProfilePage() {
           boxShadow={'lg'}
           p={6}
         >
+          {/* Heading for the User Profile Edit section */}
           <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>
             User Profile Edit
           </Heading>
+          {/* Form control for updating user profile picture */}
           <FormControl id="userName">
             <Stack direction={['column', 'row']} spacing={6}>
+              {/* Displaying current or updated profile picture */}
               <Center>
                 <Avatar
                   size="xl"
@@ -83,9 +99,11 @@ export default function UpdateProfilePage() {
                 />
               </Center>
               <Center w="full">
+                {/* Button to trigger file input click */}
                 <Button w="full" onClick={() => fileRef.current.click()}>
                   Change Avatar
                 </Button>
+                {/* Hidden file input for selecting image */}
                 <Input
                   type="file"
                   hidden
@@ -95,6 +113,7 @@ export default function UpdateProfilePage() {
               </Center>
             </Stack>
           </FormControl>
+          {/* Form controls for updating user details */}
           <FormControl>
             <FormLabel>Full name</FormLabel>
             <Input
@@ -149,7 +168,9 @@ export default function UpdateProfilePage() {
               type="password"
             />
           </FormControl>
+          {/* Stack for holding cancel and submit buttons */}
           <Stack spacing={6} direction={['column', 'row']}>
+            {/* Cancel button */}
             <Button
               bg={'red.400'}
               color={'white'}
@@ -160,6 +181,7 @@ export default function UpdateProfilePage() {
             >
               Cancel
             </Button>
+            {/* Submit button */}
             <Button
               bg={'green.400'}
               color={'white'}

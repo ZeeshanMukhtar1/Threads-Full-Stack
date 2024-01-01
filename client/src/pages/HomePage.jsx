@@ -1,3 +1,4 @@
+// Importing necessary dependencies and components
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
@@ -7,10 +8,16 @@ import postsAtom from '../atoms/postsAtom';
 import SuggestedUsers from '../components/SuggestedUsers';
 import NotFoundPage from '../components/NotFoundPage';
 
+// Component for handling the Home page
 const HomePage = () => {
+  // Recoil state for posts
   const [posts, setPosts] = useRecoilState(postsAtom);
+  // State for handling loading state
   const [loading, setLoading] = useState(true);
+  // Function for displaying toasts
   const showToast = useShowToast();
+
+  // Effect for fetching feed posts from the server
   useEffect(() => {
     const getFeedPosts = async () => {
       setLoading(true);
@@ -35,21 +42,27 @@ const HomePage = () => {
 
   return (
     <Flex gap="10" alignItems={'flex-start'}>
+      {/* Post Section */}
       <Box flex={70}>
+        {/* Displaying message when there are no posts in the feed */}
         {!loading && posts.length === 0 && (
           <NotFoundPage text="Your feed is waiting for you! Follow users to see their latest posts!" />
         )}
 
+        {/* Displaying loading spinner while posts are being fetched */}
         {loading && (
           <Flex justify="center">
             <Spinner size="xl" />
           </Flex>
         )}
 
+        {/* Displaying individual posts */}
         {posts.map((post) => (
           <Post key={post._id} post={post} postedBy={post.postedBy} />
         ))}
       </Box>
+
+      {/* Suggested Users Section */}
       <Box
         flex={30}
         display={{
@@ -63,4 +76,5 @@ const HomePage = () => {
   );
 };
 
+// Exporting the HomePage component as the default export
 export default HomePage;

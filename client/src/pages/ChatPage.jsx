@@ -1,4 +1,5 @@
-import { SearchIcon } from '@chakra-ui/icons';
+// Importing necessary dependencies and components
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,7 +13,6 @@ import {
 import Conversation from '../components/Conversation';
 import { GiConversation } from 'react-icons/gi';
 import MessageContainer from '../components/MessageContainer';
-import { useEffect, useState } from 'react';
 import useShowToast from '../hooks/useShowToast';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -21,19 +21,32 @@ import {
 } from '../atoms/messagesAtom';
 import userAtom from '../atoms/userAtom';
 import { useSocket } from '../context/SocketContext';
+import { SearchIcon } from '@chakra-ui/icons';
 
+// Component for handling the Chat page
 const ChatPage = () => {
+  // State for handling user search
   const [searchingUser, setSearchingUser] = useState(false);
-  const [loadingConversations, setLoadingConversations] = useState(true);
+  // State for storing the search text
   const [searchText, setSearchText] = useState('');
+  // State for handling loading of conversations
+  const [loadingConversations, setLoadingConversations] = useState(true);
+
+  // Recoil state for selected conversation
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
+  // Recoil state for conversations
   const [conversations, setConversations] = useRecoilState(conversationsAtom);
+
+  // Recoil state for current user
   const currentUser = useRecoilValue(userAtom);
+  // Function for displaying toasts
   const showToast = useShowToast();
+  // Socket context for real-time updates
   const { socket, onlineUsers } = useSocket();
 
+  // Effect for handling messages seen event from the server
   useEffect(() => {
     socket?.on('messagesSeen', ({ conversationId }) => {
       setConversations((prev) => {
@@ -54,6 +67,7 @@ const ChatPage = () => {
     });
   }, [socket, setConversations]);
 
+  // Effect for fetching conversations from the server
   useEffect(() => {
     const getConversations = async () => {
       try {
@@ -75,6 +89,7 @@ const ChatPage = () => {
     getConversations();
   }, [showToast, setConversations]);
 
+  // Function for handling user search and creating conversations
   const handleConversationSearch = async (e) => {
     e.preventDefault();
     setSearchingUser(true);
@@ -88,7 +103,7 @@ const ChatPage = () => {
 
       const messagingYourself = searchedUser._id === currentUser._id;
       if (messagingYourself) {
-        showToast('Error', 'Uh-oh! messaging yourself is restricted.', 'info');
+        showToast('Error', 'Uh-oh! Messaging yourself is restricted.', 'info');
         return;
       }
 
@@ -146,6 +161,7 @@ const ChatPage = () => {
         }}
         mx={'auto'}
       >
+        {/* Conversations List */}
         <Flex
           flex={30}
           gap={2}
@@ -159,6 +175,7 @@ const ChatPage = () => {
           >
             Your Conversations
           </Text>
+          {/* Search form for finding users and starting conversations */}
           <form onSubmit={handleConversationSearch}>
             <Flex alignItems={'center'} gap={2}>
               <Input
@@ -175,6 +192,7 @@ const ChatPage = () => {
             </Flex>
           </form>
 
+          {/* Loading skeleton for conversations */}
           {loadingConversations &&
             [0, 1, 2, 3, 4].map((_, i) => (
               <Flex
@@ -194,6 +212,7 @@ const ChatPage = () => {
               </Flex>
             ))}
 
+          {/* Displaying list of conversations */}
           {!loadingConversations &&
             conversations.map((conversation) => (
               <Conversation
@@ -205,6 +224,8 @@ const ChatPage = () => {
               />
             ))}
         </Flex>
+
+        {/* Message Container */}
         {!selectedConversation._id && (
           <Flex
             flex={70}
@@ -226,4 +247,5 @@ const ChatPage = () => {
   );
 };
 
+// Exporting the ChatPage component as the default export
 export default ChatPage;
