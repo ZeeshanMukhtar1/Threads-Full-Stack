@@ -1,3 +1,4 @@
+// Importing necessary dependencies and hooks
 import React from 'react';
 import {
   Button,
@@ -16,13 +17,18 @@ import {
 import useShowToast from '../hooks/useShowToast';
 import useLogout from '../hooks/useLogout';
 
+// SettingsPage component for handling account freeze functionality
 export const SettingsPage = () => {
+  // Custom hook for displaying toasts
   const showToast = useShowToast();
+  // Custom hook for user logout
   const logout = useLogout();
+  // Chakra UI hook for managing modal state
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  // Function for handling the account freeze
   const handleFreezeAccount = async () => {
-    onClose(); // Close the modal
+    onClose(); // Closing the modal
 
     try {
       const res = await fetch('/api/users/freeze', {
@@ -47,15 +53,18 @@ export const SettingsPage = () => {
     }
   };
 
+  // Function for opening the freeze account modal
   const freezeAccount = () => {
-    onOpen(); // Open the modal
+    onOpen(); // Opening the modal
   };
 
   return (
     <VStack spacing={4} align="center" justify="center">
+      {/* Heading for the Freeze Your Account section */}
       <Heading as="h2" size="lg" fontWeight="bold">
         Freeze Your Account
       </Heading>
+      {/* Description text for the Freeze Your Account section */}
       <Text
         fontSize="sm"
         textAlign="center"
@@ -64,19 +73,24 @@ export const SettingsPage = () => {
         Temporarily deactivate your account. You can unfreeze it anytime by
         logging in. Your data will be preserved!
       </Text>
+      {/* Button to initiate the account freeze process */}
       <Button colorScheme="red" onClick={freezeAccount}>
         Freeze Account
       </Button>
-      {/* if (!window.confirm('Are you sure you want to freeze your account?')) */}
-      {/* Chakra UI Modal */}
+
+      {/* Chakra UI Modal for confirming account freeze */}
       <Modal isOpen={isOpen} onClose={onClose} size="sm">
         <ModalOverlay />
         <ModalContent>
+          {/* Header for the modal */}
           <ModalHeader>Confirm Account Freeze</ModalHeader>
           <ModalBody>
+            {/* Modal body content */}
             Are you sure you want to freeze your account? Your data will be
-            preserved, and you can unfreeze it anytime by logging in.
+            preserved, and you can unfreeze it anytime by logging in, See you
+            Soon!
           </ModalBody>
+          {/* Modal footer with cancel and confirm buttons */}
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Cancel
