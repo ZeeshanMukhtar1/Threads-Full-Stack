@@ -47,6 +47,13 @@ Threads Clone is a social media platform with an integrated chat feature, design
 ![suggestions Page](./client/public/suggestedUser.png)
 ![chat Page](./client/public/chat.png)
 
+## Test Account
+
+For users who want to explore Threads Clone without creating a personal account, we provide a test account for convenience. Feel free to use the following credentials:
+
+- **Username:** test
+- **Password:** test
+
 ## Live Link 🔗
 
 [Threads Clone Live Demo](https://example.com)
