@@ -10,7 +10,7 @@ const useFollowUnfollow = (user) => {
 
   // State for tracking whether the current user is following the target user
   const [following, setFollowing] = useState(
-    user.followers.includes(currentUser?._id)
+    user && user.followers && user.followers.includes(currentUser?._id)
   );
 
   // State for tracking the update status
