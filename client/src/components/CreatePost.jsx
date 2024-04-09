@@ -1,4 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
+import { BardAPI } from 'bard-api-node';
 import {
   Button,
   CloseButton,
@@ -34,6 +35,7 @@ const MAX_CHAR = 500;
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [postText, setPostText] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
   const imageRef = useRef(null);
   const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
@@ -90,7 +92,7 @@ const CreatePost = () => {
     }
   };
 
-  async function generatePost() {
+  async function generatePostWithGPT() {
     try {
       const response = await fetch(
         'https://api.openai.com/v1/chat/completions',
@@ -118,6 +120,35 @@ const CreatePost = () => {
       onClose();
     }
   }
+
+  async function generatePostWithGemini() {
+    // https://github.com/codenze/bard-api-node?tab=readme-ov-file
+    // https://aistudio.google.com/app/apikey
+    if (isGenerating) {
+      // If post generation is already in progress, show a toast message and return early
+      showToast('Info', 'Please wait for the current post to generate', 'info');
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+      const bard = new BardAPI();
+      const apiKey = import.meta.env.VITE_BARD_API_KEY;
+      await bard.initializeChat(apiKey);
+      const response = await bard.getBardResponse(
+        'Greetings! Please generate a random social media post that contains a maximum of 50 words..!'
+      );
+
+      // Extract the text from the response
+      const generatedPostText = response.text;
+      setPostText(generatedPostText);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
   return (
     <>
       <Button
@@ -171,7 +202,7 @@ const CreatePost = () => {
                   style={{ cursor: 'pointer', marginLeft: '15px' }}
                   size={16}
                   onClick={() => {
-                    generatePost();
+                    generatePostWithGemini();
                   }}
                 />
               </Flex>
