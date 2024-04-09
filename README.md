@@ -10,6 +10,9 @@ Threads Clone is a social media platform with an integrated chat feature, design
 
 - **Sign up and login**: Users can easily create accounts and log in.
 - **Create and view posts**: Users can create text posts and view posts from others.
+- **Generate Post with Gemini**: Users can generate posts with Gemini.
+- **Reply with AI:**: Users can reply to posts with AI.
+- **Dark and light themes**: Choose between dark and light themes for a personalized experience.
 - **Attach images**: Users can enhance their posts by attaching images.
 - **Engage with posts**: Like and reply to posts similar to tweets.
 - **Profile interactions**: Visit user profiles, follow/unfollow, and update user information.
@@ -33,6 +36,9 @@ Threads Clone is a social media platform with an integrated chat feature, design
 - **Express.js**: Web application framework for Node.js.
 - **MongoDB**: Document database for storing application data.
 - **Mongoose**: MongoDB object modeling tool for Node.js.
+- **JWT**: JSON Web Token for secure user authentication.
+- **Bcrypt**: Password hashing for secure user authentication.
+- **Gemini**: AI model for generating text replies and posts.
 - **Socket.IO**: Real-time communication for a responsive chat experience.
 - **Chakra UI**: UI component library for React applications.
 - **Cloudinary**: Cloud-based image and video management platform.
@@ -46,6 +52,10 @@ Threads Clone is a social media platform with an integrated chat feature, design
 ![settngs Page](./client/public/settings.png)
 ![suggestions Page](./client/public/suggestedUser.png)
 ![chat Page](./client/public/chat.png)
+
+## AI Preview 🤖
+
+![chat Page](./client/public/ai.gif)
 
 ## Test Account
 
