@@ -121,7 +121,7 @@ const CreatePost = () => {
     }
   }
 
-  async function generatePostWithGemini() {
+  async function generatePostWithGemini(category) {
     // https://github.com/codenze/bard-api-node?tab=readme-ov-file
     // https://aistudio.google.com/app/apikey
     if (isGenerating) {
@@ -135,9 +135,12 @@ const CreatePost = () => {
       const bard = new BardAPI();
       const apiKey = import.meta.env.VITE_BARD_API_KEY;
       await bard.initializeChat(apiKey);
-      const response = await bard.getBardResponse(
-        'Greetings! Please generate a random social media post that contains a maximum of 50 words..!'
-      );
+      let prompt =
+        'Generate a random social media post that contains a maximum of 50 words..!';
+      if (category) {
+        prompt = `Generate a random social media post in ${category} category that contains a maximum of 50 words..!`;
+      }
+      const response = await bard.getBardResponse(prompt);
 
       // Extract the text from the response
       const generatedPostText = response.text;
@@ -202,7 +205,12 @@ const CreatePost = () => {
                   style={{ cursor: 'pointer', marginLeft: '15px' }}
                   size={16}
                   onClick={() => {
-                    generatePostWithGemini();
+                    const selectedCategory = prompt(
+                      'Please select a category for the post (e.g., sports, tech):'
+                    );
+                    if (selectedCategory) {
+                      generatePostWithGemini(selectedCategory);
+                    }
                   }}
                 />
               </Flex>
