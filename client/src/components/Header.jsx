@@ -64,21 +64,22 @@ const Header = () => {
         src={colorMode === 'dark' ? '/light-logo.svg' : '/dark-logo.svg'}
         onClick={toggleColorMode}
       />
-
-      {/* Search Input */}
-      <Flex alignItems="center">
-        <Input
-          type="text"
-          placeholder="Search users..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyUp={handleEnterkey}
-          mr={2}
-        />
-        <Button onClick={handleSearch} size="sm">
-          <IoSearchSharp size={20} />
-        </Button>
-      </Flex>
+      {/* Search Input - only rendered for logged-in users */}
+      {user && (
+        <Flex alignItems="center">
+          <Input
+            type="text"
+            placeholder="Search users..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyUp={handleEnterkey}
+            mr={2}
+          />
+          <Button onClick={handleSearch} size="sm">
+            <IoSearchSharp size={20} />
+          </Button>
+        </Flex>
+      )}
 
       {user && (
         <Flex alignItems={'center'} gap={4}>
