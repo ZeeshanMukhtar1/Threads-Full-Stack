@@ -98,12 +98,28 @@ export default function SignupCard() {
     }
   };
 
+  const handleEnterkey = (e) => {
+    if (e.key === 'Enter') {
+      handleSignup();
+    }
+  };
+
   return (
-    <Flex align={'center'} justify={'center'}>
+    <Flex
+      backgroundImage="url(https://static.cdninstagram.com/rsrc.php/yC/r/jxB9GUOHTf2.webp)"
+      backgroundSize="cover"
+      backgroundPosition="center"
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      align={'center'}
+      justify={'center'}
+    >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            Sign up
+            {/* Sign up */}
           </Heading>
         </Stack>
         <Box
@@ -158,6 +174,7 @@ export default function SignupCard() {
                     setInputs({ ...inputs, password: e.target.value })
                   }
                   value={inputs.password}
+                  onKeyUp={handleEnterkey}
                 />
                 <InputRightElement h={'full'}>
                   <Button
