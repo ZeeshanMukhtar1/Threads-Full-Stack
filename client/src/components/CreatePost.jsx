@@ -21,6 +21,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 import usePreviewImg from '../hooks/usePreviewImg';
 import { BsFillImageFill } from 'react-icons/bs';
 import { IoSparkles } from 'react-icons/io5';
@@ -31,6 +32,10 @@ import postsAtom from '../atoms/postsAtom';
 import { useParams } from 'react-router-dom';
 
 const MAX_CHAR = 500;
+const rateLimiter = new RateLimiterMemory({
+  points: 5, // Number of points (5 POSTS PER HOUR)
+  duration: 3600, // Per hour (3600 seconds)
+});
 
 const CreatePost = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -131,6 +136,9 @@ const CreatePost = () => {
     }
 
     try {
+      const userId = user._id; // Use the user's unique ID for rate limiting
+      await rateLimiter.consume(userId); // Consume 1 point per request
+
       setIsGenerating(true);
       const bard = new BardAPI();
       const apiKey = import.meta.env.VITE_BARD_API_KEY;
@@ -142,11 +150,19 @@ const CreatePost = () => {
       }
       const response = await bard.getBardResponse(prompt);
 
-      // Extract the text from the response
       const generatedPostText = response.text;
       setPostText(generatedPostText);
     } catch (error) {
-      console.error('Error:', error);
+      if (error) {
+        console.error('Error is :', error);
+        showToast(
+          'Info',
+          'You have reached the maximum limit of posts for this hour. Please try again later.',
+          'info'
+        );
+      } else {
+        console.error('Error:', error);
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -174,13 +190,13 @@ const CreatePost = () => {
           <ModalBody pb={6}>
             <FormControl>
               <Textarea
-                placeholder="Post content goes here.."
+                placeholder='Post content goes here..'
                 onChange={handleTextChange}
                 value={postText}
               />
               <Text
-                fontSize="xs"
-                fontWeight="bold"
+                fontSize='xs'
+                fontWeight='bold'
                 textAlign={'right'}
                 m={'1'}
                 color={'gray.800'}
@@ -189,13 +205,13 @@ const CreatePost = () => {
               </Text>
 
               <Input
-                type="file"
+                type='file'
                 hidden
                 ref={imageRef}
                 onChange={handleImageChange}
               />
 
-              <Flex alignItems="center" mt={2}>
+              <Flex alignItems='center' mt={2}>
                 <BsFillImageFill
                   style={{ cursor: 'pointer' }}
                   size={16}
@@ -218,7 +234,7 @@ const CreatePost = () => {
 
             {imgUrl && (
               <Flex mt={5} w={'full'} position={'relative'}>
-                <Image src={imgUrl} alt="Selected img" />
+                <Image src={imgUrl} alt='Selected img' />
                 <CloseButton
                   onClick={() => {
                     setImgUrl('');
@@ -234,7 +250,7 @@ const CreatePost = () => {
 
           <ModalFooter>
             <Button
-              colorScheme="blue"
+              colorScheme='blue'
               mr={3}
               onClick={handleCreatePost}
               isLoading={loading}
