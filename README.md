@@ -6,28 +6,48 @@ Threads Clone is a social media platform with an integrated chat feature, design
 
 ## Features
 
-### Platform 🌐:
+### Platform Core 🌐
 
 - **Sign up and login**: Users can easily create accounts and log in.
-- **Create and view posts**: Users can create text posts and view posts from others.
-- **Generate Post with Gemini**: Users can generate posts with Gemini.
-- **Reply with AI:**: Users can reply to posts with AI.
+- **Secure authentication**: Passwords are hashed for secure user authentication.
+- **Robust Validation**: Robust validation for user input on both the client and server sides.
+- **Responsive design**: The platform is fully mobile-responsive for a seamless user experience.
+- **404 page**: Custom 404 page for handling invalid routes.
+- **Error handling**: Informative error messages for a user-friendly experience.
+- **Loading spinners**: Visual loading spinners for a smooth user experience.
+- **Toast notifications**: Informative toast notifications for user actions.
 - **Dark and light themes**: Choose between dark and light themes for a personalized experience.
+- **Logout functionality**: Securely log out of the platform.
+- **Real-time updates**: Stay informed with real-time updates for new posts and replies.
+
+### User Interaction Features ✨
+
+- **Create and view posts**: Users can create text posts and view posts from others.
 - **Attach images**: Users can enhance their posts by attaching images.
 - **Engage with posts**: Like and reply to posts similar to tweets.
 - **Profile interactions**: Visit user profiles, follow/unfollow, and update user information.
 - **Account management**: Freeze/unfreeze accounts and update account information.
 - **Suggested users**: Get recommendations for users to follow.
 - **Delete posts**: Users can remove their own posts.
-- **Logout functionality**: Securely log out of the platform.
-- **Real-time updates**: Stay informed with real-time updates for new posts and replies.
 
-### Chat 💬:
+### AI Integration 🤖
+
+- **Generate Post with Gemini**: Users can generate posts with Gemini.
+- **Proper Rate Limiting**: Proper rate limiting for Gemini API to avoid abuse.
+- **Reply with AI**: Users can reply to posts with AI.
+
+### Chat Feature 💬
 
 - **Send text and images**: Users can communicate with each other using text and images.
 - **Online user status**: Know when users are online.
 - **Notification tones**: Receive notification tones for new messages when the chat is out of focus.
 - **Read receipts**: Check if a message has been seen by the recipient.
+
+### Optimization Features 🚀
+
+- **Efficient Loading**: Visual loading spinners and lazy loading for images to enhance performance.
+- **Rate Limiting**: Proper rate limiting for Gemini API to avoid abuse. (5 POSTS PER HOUR)
+- **tracing User actions**: Proper states for components to avoid unnecessary re-renders and Api calls to backend.
 
 ## Technologies Used 🚀
 
@@ -42,6 +62,9 @@ Threads Clone is a social media platform with an integrated chat feature, design
 - **Socket.IO**: Real-time communication for a responsive chat experience.
 - **Chakra UI**: UI component library for React applications.
 - **Cloudinary**: Cloud-based image and video management platform.
+- **rate-limiter-flexible**: Rate limiting for Gemini API to avoid abuse.
+- **sass**: CSS preprocessor for styling.
+- **recoil**: State management library for React applications.
 
 ## Screenshots / Preview 📸
 
@@ -53,32 +76,16 @@ Threads Clone is a social media platform with an integrated chat feature, design
 ![suggestions Page](./client/public/suggestedUser.png)
 ![chat Page](./client/public/chat.png)
 
-## AI Preview 🤖
-
-![chat Page](./client/public/ai.gif)
-
-## Test Account
-
-For users who want to explore Threads Clone without creating a personal account, we provide a test account for convenience. Feel free to use the following credentials:
-
-- **Username:** test
-- **Password:** test
-
-## Live Link 🔗
-
-[Threads Clone Live Demo](https://example.com)
-
 ## Acknowledgements
 
 - **Developer:** Zeeshan Mukhtar
   - LinkedIn: [Zeeshan Mukhtar](https://www.linkedin.com/in/zeeshanmukhtar1/)
 
-This project is a follow-along tutorial inspired by the [FreeCodeCamp](https://www.freecodecamp.org/) tutorial. Special thanks to FreeCodeCamp for providing valuable learning resources and guidance.
+This project is a follow-along tutorial inspired by the [As a Programmer](https://www.youtube.com/playlist?list=PLNEhktk_WNzr2sgIyas0DDcUFRrmSe42Q) tutorial. Special thanks to `burakorkmez` for providing valuable learning resources and guidance.
 
 ## Contributing 🤝
 
-Contributions, issues, and feature requests are welcome!
-please feel free to open an issue or create a pull request.
+Contributions, issues, and feature requests are welcome! Please feel free to open an issue or create a pull request.
 
 ## License 📜
 
