@@ -7,6 +7,8 @@ import { useRecoilState } from 'recoil';
 import postsAtom from '../atoms/postsAtom';
 import SuggestedUsers from '../components/SuggestedUsers';
 import NotFoundPage from '../components/NotFoundPage';
+import { shuffleArray } from '../utils/shuffleArray';
+import staticPosts from '../data/posts.json';
 
 // Component for handling the Home page
 const HomePage = () => {
@@ -40,19 +42,31 @@ const HomePage = () => {
     getFeedPosts();
   }, [showToast, setPosts]);
 
+  // Shuffling static posts to display if there are no posts
+  const shuffledStaticPosts = shuffleArray(staticPosts);
+
   return (
-    <Flex gap="10" alignItems={'flex-start'}>
+    <Flex gap='10' alignItems={'flex-start'}>
       {/* Post Section */}
       <Box flex={70}>
         {/* Displaying message when there are no posts in the feed */}
         {!loading && posts.length === 0 && (
-          <NotFoundPage text="Your feed is waiting for you! Follow users to see their latest posts!" />
+          <>
+            {shuffledStaticPosts.map((post, index) => (
+              <Post
+                key={index}
+                post={post}
+                postedBy={post.postedBy}
+                placeholder
+              />
+            ))}
+          </>
         )}
 
         {/* Displaying loading spinner while posts are being fetched */}
         {loading && (
-          <Flex justify="center">
-            <Spinner size="xl" />
+          <Flex justify='center'>
+            <Spinner size='xl' />
           </Flex>
         )}
 

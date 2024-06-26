@@ -1,0 +1,122 @@
+[
+  {
+    "_id": "1",
+    "text": "KFC is the best! You should try it out! 😋",
+    "img": "/kfc.webp",
+    "replies": [],
+    "likes": [
+      {
+        "likedBy": "1"
+      }
+    ]
+  },
+  {
+    "_id": "2",
+    "text": "Ramzan offer on Coca-Cola! Get 2 for the price of 1! 🥤🥤",
+    "img": "coca-kola.webp",
+    "replies": [
+      {
+        "_id": "1",
+        "text": "I am so excited for the Ramzan offer on Coca-Cola! 😍"
+      },
+      {
+        "_id": "2",
+        "text": "I am not sure about the Ramzan offer on Coca-Cola. I think I will stick to my current drink. 🤔"
+      },
+      {
+        "_id": "3",
+        "text": "I am so excited for the Ramzan offer on Coca-Cola! 😍"
+      }
+    ],
+    "likes": [
+      {
+        "likedBy": "1"
+      },
+      {
+        "likedBy": "2"
+      }
+    ]
+  },
+  {
+    "_id": "3",
+    "text": "Check out the new McDonald's menu! 🍔🍟",
+    "img": "Macdonalds.webp",
+    "replies": [],
+    "likes": [
+      {
+        "likedBy": "1"
+      },
+      {
+        "likedBy": "2"
+      }
+    ]
+  },
+  {
+    "_id": "4",
+    "text": "Oppo has launched a new phone! Check it out! 📱",
+    "img": "oppo.webp",
+    "replies": [
+      {
+        "_id": "1",
+        "text": "I am so excited for Oppo's new phone! 😍"
+      },
+      {
+        "_id": "2",
+        "text": "I am not sure about Oppo's new phone. I think I will stick to my current phone. 🤔"
+      },
+      {
+        "_id": "3",
+        "text": "I am so excited for Oppo's new phone! 😍"
+      }
+    ],
+    "likes": [
+      {
+        "likedBy": "1"
+      },
+      {
+        "likedBy": "2"
+      }
+    ]
+  },
+  {
+    "_id": "5",
+    "text": "Tesla has launched a new car! Check it out! 🚗",
+    "img": "tesla.webp",
+    "replies": [],
+    "likes": [
+      {
+        "likedBy": "1"
+      },
+      {
+        "likedBy": "2"
+      }
+    ]
+  },
+  {
+    "_id": "6",
+    "text": "Introduction to Windows 11! Check it out! 🖥️",
+    "img": "windows.webp",
+    "replies": [
+      {
+        "_id": "1",
+        "text": "I am so excited for Windows 11! 😍"
+      },
+      {
+        "_id": "2",
+        "text": "I am not sure about Windows 11. I think I will stick to Windows 10. 🤔"
+      },
+      {
+        "_id": "3",
+        "text": "I am so excited for Windows 11! 😍"
+      }
+    ],
+    "likes": [
+      {
+        "likedBy": "1"
+      },
+      {
+        "likedBy": "2"
+      }
+    ]
+  }
+]
