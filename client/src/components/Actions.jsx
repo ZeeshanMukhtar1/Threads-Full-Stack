@@ -11,9 +11,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Text,
-  Toast,
   useDisclosure,
+  Link,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BardAPI } from 'bard-api-node';
@@ -21,6 +22,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import useShowToast from '../hooks/useShowToast';
 import postsAtom from '../atoms/postsAtom';
+import { FaRegFlag } from 'react-icons/fa';
+import { PiShareFat } from 'react-icons/pi';
+import { Textarea } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const Actions = ({ post, isStatic }) => {
   const user = useRecoilValue(userAtom);
@@ -28,12 +33,18 @@ const Actions = ({ post, isStatic }) => {
   const [posts, setPosts] = useRecoilState(postsAtom);
   const [isLiking, setIsLiking] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
-  const [isGenerating, setisGenerating] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [reply, setReply] = useState('');
   const [replyLoading, setReplyLoading] = useState(false);
+  const [reportReason, setReportReason] = useState('');
 
   const showToast = useShowToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isReportOpen,
+    onOpen: onReportOpen,
+    onClose: onReportClose,
+  } = useDisclosure();
 
   const handleLikeAndUnlike = async () => {
     if (isStatic) return;
@@ -132,7 +143,7 @@ const Actions = ({ post, isStatic }) => {
       );
       return; // Prevent multiple requests
     }
-    setisGenerating(true);
+    setIsGenerating(true);
     setReplyLoading(true); // Set replyLoading to true when reply generation starts
     try {
       const bard = new BardAPI();
@@ -141,7 +152,6 @@ const Actions = ({ post, isStatic }) => {
       const response = await bard.getBardResponse(
         'Please generate a random reply to a post contains a maximum of 10 words..!'
       );
-
       // Extract the text from the response
       const generatedPostText = response.text;
       setReply(generatedPostText);
@@ -150,10 +160,68 @@ const Actions = ({ post, isStatic }) => {
       console.error('Error:', error);
       showToast('Error', 'You exceeded your current quota', 'error');
     } finally {
-      setisGenerating(false);
+      setIsGenerating(false);
       setReplyLoading(false); // Set replyLoading to false when reply generation finishes
     }
   }
+
+  const handleReport = async () => {
+    if (isStatic) return;
+    if (!user)
+      return showToast(
+        'Error',
+        'You must be logged in to report a post',
+        'error'
+      );
+    try {
+      onReportOpen();
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    }
+  };
+
+  const handleReportSubmit = async () => {
+    if (!reportReason)
+      return showToast('Error', 'Please select a reason', 'error');
+    try {
+      // Simulate report submission
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      showToast('Success', 'Post reported successfully', 'success');
+      onReportClose();
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    }
+  };
+
+  const handleSharePost = async () => {
+    if (isStatic) return;
+    if (!user)
+      return showToast(
+        'Error',
+        'You must be logged in to share a post',
+        'error'
+      );
+    const postUrl = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Share Post',
+          text: 'Check out this post!',
+          url: postUrl,
+        });
+        showToast('Success', 'Post shared successfully', 'success');
+      } catch (error) {
+        showToast('Error', 'Failed to share the post', 'error');
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(postUrl);
+        showToast('Success', 'Post URL copied to clipboard', 'success');
+      } catch (error) {
+        showToast('Error', 'Failed to copy the post URL', 'error');
+      }
+    }
+  };
 
   return (
     <Flex flexDirection='column'>
@@ -195,53 +263,103 @@ const Actions = ({ post, isStatic }) => {
           ></path>
         </svg>
 
-        <RepostSVG />
-        <ShareSVG />
+        <div onClick={handleSharePost}>
+          <PiShareFat size={20} />
+        </div>
+
+        <FaRegFlag onClick={handleReport} cursor='pointer' size={20} />
       </Flex>
 
-      <Flex gap={2} alignItems={'center'}>
-        <Text color={'gray.light'} fontSize='sm'>
-          {post.replies.length} replies
-        </Text>
-        <Box w={0.5} h={0.5} borderRadius={'full'} bg={'gray.light'}></Box>
-        <Text color={'gray.light'} fontSize='sm'>
-          {post.likes?.length} likes
-        </Text>
-      </Flex>
+      <Text fontWeight={500}>{post?.likes?.length || 0} likes</Text>
 
+      {/* Modal for Reporting */}
+      <Modal isOpen={isReportOpen} onClose={onReportClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Report Post</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <Select
+                placeholder='Select a reason'
+                value={reportReason}
+                onChange={(e) => setReportReason(e.target.value)}
+              >
+                <option value='violenceThreats'>Violence or Threats</option>
+                <option value='hateSpeech'>Hate Speech</option>
+                <option value='bullyingHarassment'>
+                  Bullying or Harassment
+                </option>
+                <option value='nuditySexualContent'>
+                  Nudity or Sexual Content
+                </option>
+                <option value='exploitationAbuse'>Exploitation or Abuse</option>
+                <option value='selfHarm'>Self-Harm</option>
+                <option value='spam'>Spam</option>
+                <option value='misinformationDisinformation'>
+                  Misinformation or Disinformation
+                </option>
+                <option value='copyrightTrademark'>
+                  Copyright or Trademark Infringement
+                </option>
+              </Select>
+              <br />
+              <Textarea
+                isInvalid
+                placeholder='Please provide additional details (optional)
+              '
+              />
+              <Box mt={3}>
+                <Text fontSize={'small'}>
+                  For child exploitation content, report directly to the
+                  National Center for Missing and Exploited Children (NCMEC) at{' '}
+                  <Link href='https://report.cybertip.org/' isExternal>
+                    <ExternalLinkIcon
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                      }}
+                      mx='2px'
+                    />
+                  </Link>
+                </Text>
+              </Box>
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme='red' onClick={handleReportSubmit}>
+              Submit Report
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Modal for Reply */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader></ModalHeader>
+          <ModalHeader>Post a Reply</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={6}>
+          <ModalBody>
             <FormControl>
               <Input
-                placeholder='Reply goes here..'
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
+                placeholder='Write a reply...'
               />
             </FormControl>
           </ModalBody>
-
           <ModalFooter>
             <Button
               colorScheme='blue'
-              size={'sm'}
               mr={3}
-              isLoading={isReplying}
               onClick={handleReply}
+              isLoading={replyLoading}
             >
               Reply
             </Button>
-            <Button
-              colorScheme='blue'
-              size={'sm'}
-              mr={3}
-              isLoading={isReplying}
-              onClick={handleReplyWithAI}
-            >
-              {replyLoading ? 'Generating...' : 'Reply with AI 🤖'}
+            <Button variant='ghost' onClick={handleReplyWithAI}>
+              Generate Reply
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -251,56 +369,3 @@ const Actions = ({ post, isStatic }) => {
 };
 
 export default Actions;
-
-const RepostSVG = () => {
-  return (
-    <svg
-      aria-label='Repost'
-      color='currentColor'
-      fill='currentColor'
-      height='20'
-      role='img'
-      viewBox='0 0 24 24'
-      width='20'
-    >
-      <title>Repost</title>
-      <path
-        fill=''
-        d='M19.998 9.497a1 1 0 0 0-1 1v4.228a3.274 3.274 0 0 1-3.27 3.27h-5.313l1.791-1.787a1 1 0 0 0-1.412-1.416L7.29 18.287a1.004 1.004 0 0 0-.294.707v.001c0 .023.012.042.013.065a.923.923 0 0 0 .281.643l3.502 3.504a1 1 0 0 0 1.414-1.414l-1.797-1.798h5.318a5.276 5.276 0 0 0 5.27-5.27v-4.228a1 1 0 0 0-1-1Zm-6.41-3.496-1.795 1.795a1 1 0 1 0 1.414 1.414l3.5-3.5a1.003 1.003 0 0 0 0-1.417l-3.5-3.5a1 1 0 0 0-1.414 1.414l1.794 1.794H8.27A5.277 5.277 0 0 0 3 9.271V13.5a1 1 0 0 0 2 0V9.271a3.275 3.275 0 0 1 3.271-3.27Z'
-      ></path>
-    </svg>
-  );
-};
-
-const ShareSVG = () => {
-  return (
-    <svg
-      aria-label='Share'
-      color=''
-      fill='rgb(243, 245, 247)'
-      height='20'
-      role='img'
-      viewBox='0 0 24 24'
-      width='20'
-    >
-      <title>Share</title>
-      <line
-        fill='none'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='2'
-        x1='22'
-        x2='9.218'
-        y1='3'
-        y2='10.083'
-      ></line>
-      <polygon
-        fill='none'
-        points='11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334'
-        stroke='currentColor'
-        strokeLinejoin='round'
-        strokeWidth='2'
-      ></polygon>
-    </svg>
-  );
-};
