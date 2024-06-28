@@ -104,12 +104,12 @@ const PostPage = () => {
       {/* User and post information */}
       <Flex>
         <Flex w={'full'} alignItems={'center'} gap={3}>
-          <Avatar src={user.profilePic} size={'md'} name='Mark Zuckerberg' />
+          <Avatar src={user.profilePic} size={'md'} name="Mark Zuckerberg" />
           <Flex>
             <Text fontSize={'sm'} fontWeight={'bold'}>
               {user.username}
             </Text>
-            <Image src='/verified.png' w='4' h={4} ml={4} />
+            <Image src="/verified.png" w="4" h={4} ml={4} />
           </Flex>
         </Flex>
         <Flex gap={4} alignItems={'center'}>

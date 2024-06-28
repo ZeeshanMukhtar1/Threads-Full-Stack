@@ -71,7 +71,7 @@ const Post = ({ post, postedBy, placeholder }) => {
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
           <Avatar
-            size='md'
+            size="md"
             name={user.name}
             src={user?.profilePic}
             onClick={(e) => {
@@ -81,41 +81,41 @@ const Post = ({ post, postedBy, placeholder }) => {
               }
             }}
           />
-          <Box w='1px' h={'full'} bg='gray.light' my={2}></Box>
+          <Box w="1px" h={'full'} bg="gray.light" my={2}></Box>
           <Box position={'relative'} w={'full'}>
             {post.replies.length === 0 && <Text textAlign={'center'}>🥱</Text>}
             {post.replies[0] && (
               <Avatar
-                size='xs'
-                name='John doe'
+                size="xs"
+                name="John doe"
                 src={post.replies[0].userProfilePic}
                 position={'absolute'}
                 top={'0px'}
-                left='15px'
+                left="15px"
                 padding={'2px'}
               />
             )}
 
             {post.replies[1] && (
               <Avatar
-                size='xs'
-                name='John doe'
+                size="xs"
+                name="John doe"
                 src={post.replies[1].userProfilePic}
                 position={'absolute'}
                 bottom={'0px'}
-                right='-5px'
+                right="-5px"
                 padding={'2px'}
               />
             )}
 
             {post.replies[2] && (
               <Avatar
-                size='xs'
-                name='John doe'
+                size="xs"
+                name="John doe"
                 src={post.replies[2].userProfilePic}
                 position={'absolute'}
                 bottom={'0px'}
-                left='4px'
+                left="4px"
                 padding={'2px'}
               />
             )}
@@ -136,7 +136,7 @@ const Post = ({ post, postedBy, placeholder }) => {
               >
                 {user?.username}
               </Text>
-              <Image src='/verified.png' w={4} h={4} ml={1} />
+              <Image src="/verified.png" w={4} h={4} ml={1} />
             </Flex>
             <Flex gap={4} alignItems={'center'}>
               <Text

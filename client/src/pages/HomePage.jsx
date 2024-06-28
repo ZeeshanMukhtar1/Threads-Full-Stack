@@ -46,7 +46,7 @@ const HomePage = () => {
   const shuffledStaticPosts = shuffleArray(staticPosts);
 
   return (
-    <Flex gap='10' alignItems={'flex-start'}>
+    <Flex gap="10" alignItems={'flex-start'}>
       {/* Post Section */}
       <Box flex={70}>
         {/* Displaying message when there are no posts in the feed */}
@@ -65,8 +65,8 @@ const HomePage = () => {
 
         {/* Displaying loading spinner while posts are being fetched */}
         {loading && (
-          <Flex justify='center'>
-            <Spinner size='xl' />
+          <Flex justify="center">
+            <Spinner size="xl" />
           </Flex>
         )}
 

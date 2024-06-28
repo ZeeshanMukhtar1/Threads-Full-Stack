@@ -1,0 +1,9 @@
+#  ensures which files cant be formatted by the prettier configration
+
+/.vscode
+/node_modules
+./dist
+
+*.env
+.env
+.env*
