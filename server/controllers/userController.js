@@ -6,26 +6,33 @@ import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
 
 const getUserProfile = async (req, res) => {
-  // We will fetch user profile either with username or userId
-  // query is either username or userId
   const { query } = req.params;
 
   try {
     let user;
 
-    // query is userId
     if (mongoose.Types.ObjectId.isValid(query)) {
-      user = await User.findOne({ _id: query })
-        .select("-password")
-        .select("-updatedAt");
+      user = await User.findOne({ _id: query }).select("-password -updatedAt");
     } else {
-      // query is username
-      user = await User.findOne({ username: query })
-        .select("-password")
-        .select("-updatedAt");
+      user = await User.findOne({ username: query }).select(
+        "-password -updatedAt"
+      );
     }
 
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      // Find similar usernames if an exact match is not found
+      const similarUsers = await User.find({
+        username: { $regex: query, $options: "i" },
+      })
+        .limit(3)
+        .select("username");
+
+      if (similarUsers.length > 0) {
+        return res.status(200).json({ similarUsers });
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    }
 
     res.status(200).json(user);
   } catch (err) {

@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import UserHeader from '../components/UserHeader';
-import { useParams } from 'react-router-dom';
-import useShowToast from '../hooks/useShowToast';
-import { Flex, Spinner } from '@chakra-ui/react';
-import Post from '../components/Post';
-import useGetUserProfile from '../hooks/useGetUserProfile';
-import { useRecoilState } from 'recoil';
-import postsAtom from '../atoms/postsAtom';
-import NotFoundPage from '../components/NotFoundPage';
+import { useEffect, useState } from "react";
+import UserHeader from "../components/UserHeader";
+import { useParams } from "react-router-dom";
+import useShowToast from "../hooks/useShowToast";
+import { Flex, Spinner } from "@chakra-ui/react";
+import Post from "../components/Post";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import { useRecoilState } from "recoil";
+import postsAtom from "../atoms/postsAtom";
+import NotFoundPage from "../components/NotFoundPage";
 
 const UserPage = () => {
   const { user, loading } = useGetUserProfile();
@@ -32,7 +32,7 @@ const UserPage = () => {
         setPosts(data);
       } catch (error) {
         // Handling errors during fetch
-        showToast('Error', error.message, 'error');
+        showToast("Error", error.message, "error");
         setPosts([]);
       } finally {
         // Setting-up fetchingPosts to false after fetching is complete
@@ -49,8 +49,8 @@ const UserPage = () => {
   // Render loading spinner while user data is being fetched
   if (!user && loading) {
     return (
-      <Flex justifyContent={'center'}>
-        <Spinner size={'xl'} />
+      <Flex justifyContent={"center"}>
+        <Spinner size={"xl"} />
       </Flex>
     );
   }
@@ -60,7 +60,7 @@ const UserPage = () => {
     return (
       <NotFoundPage
         text="Oops! This user seems to be missing. Maybe they froze their account?"
-        textSize={'md'}
+        textSize={"md"}
       />
     );
   }
@@ -77,8 +77,8 @@ const UserPage = () => {
 
       {/* If posts are still being fetched, show a loading spinner */}
       {fetchingPosts && (
-        <Flex justifyContent={'center'} my={12}>
-          <Spinner size={'xl'} />
+        <Flex justifyContent={"center"} my={12}>
+          <Spinner size={"xl"} />
         </Flex>
       )}
 
