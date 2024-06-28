@@ -25,6 +25,7 @@ import postsAtom from '../atoms/postsAtom';
 import { FaRegFlag } from 'react-icons/fa';
 import { PiShareFat } from 'react-icons/pi';
 import { Textarea } from '@chakra-ui/react';
+import { AiOutlineCopy } from 'react-icons/ai';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const Actions = ({ post, isStatic }) => {
@@ -180,6 +181,16 @@ const Actions = ({ post, isStatic }) => {
     }
   };
 
+  const handleCopyUrl = async () => {
+    const postUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(postUrl);
+      showToast('Success', 'Post URL copied to clipboard', 'success');
+    } catch (error) {
+      showToast('Error', 'Failed to copy the post URL', 'error');
+    }
+  };
+
   const handleReportSubmit = async () => {
     if (!reportReason)
       return showToast('Error', 'Please select a reason', 'error');
@@ -268,6 +279,9 @@ const Actions = ({ post, isStatic }) => {
         </div>
 
         <FaRegFlag onClick={handleReport} cursor='pointer' size={20} />
+        <div onClick={handleCopyUrl}>
+          <AiOutlineCopy size={20} />
+        </div>
       </Flex>
 
       <Text fontWeight={500}>{post?.likes?.length || 0} likes</Text>
