@@ -90,17 +90,26 @@ const PostPage = () => {
   // If there is no current post, return null
   if (!currentPost) return null;
 
+  // Function for handling mobile app download
+  const handleMobileApp = () => {
+    showToast(
+      'Info',
+      'Thanks for interest in our app. We are currently working on it. Stay tuned for updates!',
+      'info'
+    );
+  };
+
   return (
     <>
       {/* User and post information */}
       <Flex>
         <Flex w={'full'} alignItems={'center'} gap={3}>
-          <Avatar src={user.profilePic} size={'md'} name="Mark Zuckerberg" />
+          <Avatar src={user.profilePic} size={'md'} name='Mark Zuckerberg' />
           <Flex>
             <Text fontSize={'sm'} fontWeight={'bold'}>
               {user.username}
             </Text>
-            <Image src="/verified.png" w="4" h={4} ml={4} />
+            <Image src='/verified.png' w='4' h={4} ml={4} />
           </Flex>
         </Flex>
         <Flex gap={4} alignItems={'center'}>
@@ -134,7 +143,13 @@ const PostPage = () => {
       )}
 
       {/* Action buttons for the post */}
-      <Flex gap={3} my={3}>
+      <Flex
+        gap={3}
+        my={3}
+        style={{
+          cursor: 'pointer',
+        }}
+      >
         <Actions post={currentPost} />
       </Flex>
 
@@ -146,7 +161,7 @@ const PostPage = () => {
           <Text fontSize={'2xl'}>👋</Text>
           <Text color={'gray.light'}>Get the app to like, reply and post.</Text>
         </Flex>
-        <Button>Get</Button>
+        <Button onClick={handleMobileApp}>Get</Button>
       </Flex>
 
       <Divider my={4} />
