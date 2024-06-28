@@ -11,6 +11,8 @@ Threads Clone is a social media platform with an integrated chat feature, design
 - **Sign up and login**: Users can easily create accounts and log in.
 - **Secure authentication**: Passwords are hashed for secure user authentication.
 - **Robust Validation**: Robust validation for user input on both the client and server sides.
+- **sponsored posts to fresh users**: Sponsored posts for fresh users to get them started.
+- **fetch similar users while searching**: Fetch similar users while searching for users.
 - **Responsive design**: The platform is fully mobile-responsive for a seamless user experience.
 - **404 page**: Custom 404 page for handling invalid routes.
 - **Error handling**: Informative error messages for a user-friendly experience.
@@ -24,17 +26,21 @@ Threads Clone is a social media platform with an integrated chat feature, design
 
 - **Create and view posts**: Users can create text posts and view posts from others.
 - **Attach images**: Users can enhance their posts by attaching images.
+- **Report improper posts**: Users can report posts that violate community guidelines or relgious content.
 - **Engage with posts**: Like and reply to posts similar to tweets.
 - **Profile interactions**: Visit user profiles, follow/unfollow, and update user information.
 - **Account management**: Freeze/unfreeze accounts and update account information.
 - **Suggested users**: Get recommendations for users to follow.
 - **Delete posts**: Users can remove their own posts.
+- **Copy post Url to clipboard**: Users can copy post Url to clipboard.
+- **Share post to other platforms**: Users can share posts to other platforms.
 
 ### AI Integration 🤖
 
 - **Generate Post with Gemini**: Users can generate posts with Gemini.
 - **Proper Rate Limiting**: Proper rate limiting for Gemini API to avoid abuse.
 - **Reply with AI**: Users can reply to posts with AI.
+- **IP adress tracking**: Proper IP address tracking for Gemini API to avoid abuse.
 
 ### Chat Feature 💬
 
