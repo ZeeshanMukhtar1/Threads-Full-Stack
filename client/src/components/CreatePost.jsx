@@ -190,13 +190,13 @@ const CreatePost = () => {
           <ModalBody pb={6}>
             <FormControl>
               <Textarea
-                placeholder='Post content goes here..'
+                placeholder="Post content goes here.."
                 onChange={handleTextChange}
                 value={postText}
               />
               <Text
-                fontSize='xs'
-                fontWeight='bold'
+                fontSize="xs"
+                fontWeight="bold"
                 textAlign={'right'}
                 m={'1'}
                 color={'gray.800'}
@@ -205,13 +205,13 @@ const CreatePost = () => {
               </Text>
 
               <Input
-                type='file'
+                type="file"
                 hidden
                 ref={imageRef}
                 onChange={handleImageChange}
               />
 
-              <Flex alignItems='center' mt={2}>
+              <Flex alignItems="center" mt={2}>
                 <BsFillImageFill
                   style={{ cursor: 'pointer' }}
                   size={16}
@@ -234,7 +234,7 @@ const CreatePost = () => {
 
             {imgUrl && (
               <Flex mt={5} w={'full'} position={'relative'}>
-                <Image src={imgUrl} alt='Selected img' />
+                <Image src={imgUrl} alt="Selected img" />
                 <CloseButton
                   onClick={() => {
                     setImgUrl('');
@@ -250,7 +250,7 @@ const CreatePost = () => {
 
           <ModalFooter>
             <Button
-              colorScheme='blue'
+              colorScheme="blue"
               mr={3}
               onClick={handleCreatePost}
               isLoading={loading}

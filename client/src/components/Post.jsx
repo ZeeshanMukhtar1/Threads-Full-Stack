@@ -10,8 +10,9 @@ import { FaTrash } from 'react-icons/fa';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import postsAtom from '../atoms/postsAtom';
+import users from '../data/users.json';
 
-const Post = ({ post, postedBy }) => {
+const Post = ({ post, postedBy, placeholder }) => {
   const [user, setUser] = useState(null);
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom);
@@ -19,6 +20,13 @@ const Post = ({ post, postedBy }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (placeholder) {
+      // Get a random user from the static users.json file
+      const randomUser = users[Math.floor(Math.random() * users.length)];
+      setUser(randomUser);
+      return;
+    }
+
     const getUser = async () => {
       try {
         const res = await fetch('/api/users/profile/' + postedBy);
@@ -35,7 +43,7 @@ const Post = ({ post, postedBy }) => {
     };
 
     getUser();
-  }, [postedBy, showToast]);
+  }, [postedBy, showToast, placeholder]);
 
   const handleDeletePost = async (e) => {
     try {
@@ -59,7 +67,7 @@ const Post = ({ post, postedBy }) => {
 
   if (!user) return null;
   return (
-    <Link to={`/${user.username}/post/${post._id}`}>
+    <Link to={placeholder ? '#' : `/${user.username}/post/${post._id}`}>
       <Flex gap={3} mb={4} py={5}>
         <Flex flexDirection={'column'} alignItems={'center'}>
           <Avatar
@@ -67,8 +75,10 @@ const Post = ({ post, postedBy }) => {
             name={user.name}
             src={user?.profilePic}
             onClick={(e) => {
-              e.preventDefault();
-              navigate(`/${user.username}`);
+              if (!placeholder) {
+                e.preventDefault();
+                navigate(`/${user.username}`);
+              }
             }}
           />
           <Box w="1px" h={'full'} bg="gray.light" my={2}></Box>
@@ -118,8 +128,10 @@ const Post = ({ post, postedBy }) => {
                 fontSize={'sm'}
                 fontWeight={'bold'}
                 onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/${user.username}`);
+                  if (!placeholder) {
+                    e.preventDefault();
+                    navigate(`/${user.username}`);
+                  }
                 }}
               >
                 {user?.username}
@@ -133,10 +145,12 @@ const Post = ({ post, postedBy }) => {
                 textAlign={'right'}
                 color={'gray.light'}
               >
-                {formatDistanceToNow(new Date(post.createdAt))} ago
+                {placeholder
+                  ? 'a moment ago'
+                  : `${formatDistanceToNow(new Date(post.createdAt))} ago`}
               </Text>
 
-              {currentUser?._id === user._id && (
+              {!placeholder && currentUser?._id === user._id && (
                 <FaTrash size={20} onClick={handleDeletePost} />
               )}
             </Flex>
@@ -155,7 +169,8 @@ const Post = ({ post, postedBy }) => {
           )}
 
           <Flex gap={3} my={1}>
-            <Actions post={post} />
+            <Actions post={post} isStatic={placeholder} />{' '}
+            {/* Passing isStatic prop */}
           </Flex>
         </Flex>
       </Flex>

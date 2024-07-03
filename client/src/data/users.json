@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "username": "Zeeshan",
+    "name": "Zeeshan",
+    "profilePic": "https://bit.ly/dan-abramov"
+  },
+  {
+    "id": 2,
+    "username": "USman",
+    "name": "Usman",
+    "profilePic": "https://bit.ly/code-beast"
+  },
+  {
+    "id": 3,
+    "username": "Kamran",
+    "name": "Kamran",
+    "profilePic": "https://bit.ly/prosper-baba"
+  },
+  {
+    "id": 4,
+    "username": "Muzammil",
+    "name": "Muzammil",
+    "profilePic": "https://bit.ly/sage-adebayo"
+  },
+  {
+    "id": 5,
+    "username": "Ahmed Kareem",
+    "name": "Ahmed",
+    "profilePic": "https://bit.ly/ryan-florence"
+  }
+]

@@ -18,6 +18,7 @@ import authScreenAtom from '../atoms/authAtom';
 import { BsChatHeartFill } from 'react-icons/bs';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { IoSearchSharp } from 'react-icons/io5';
+import useShowToast from '../hooks/useShowToast';
 
 const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -26,13 +27,36 @@ const Header = () => {
   const navigate = useNavigate();
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [searchQuery, setSearchQuery] = useState('');
+  const showToast = useShowToast();
 
-  const handleSearch = () => {
-    // Redirect to the user profile page with the searched username
-    // window.location.href = `/${searchQuery}`; // This will reload the page
-    navigate(`/${searchQuery}`); // This will not reload the page and is faster than window.location.href 😉
-    // reset the search query
-    setSearchQuery('');
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`/api/users/profile/${searchQuery}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.similarUsers) {
+          // Show toast with similar usernames and navigate to the first similar user
+          showToast(
+            'Info',
+            `Did you mean: ${data.similarUsers
+              .map((user) => user.username)
+              .join(', ')}?`,
+            'info'
+          );
+          navigate(`/${data.similarUsers[0].username}`);
+        } else {
+          // Navigate to the exact username
+          navigate(`/${searchQuery}`);
+        }
+      } else {
+        showToast('Error', data.error, 'error');
+      }
+
+      setSearchQuery('');
+    } catch (error) {
+      showToast('Error', error.message, 'error');
+    }
   };
 
   const handleEnterkey = (e) => {
