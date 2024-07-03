@@ -27,6 +27,7 @@ import { PiShareFat } from 'react-icons/pi';
 import { Textarea } from '@chakra-ui/react';
 import { AiOutlineCopy } from 'react-icons/ai';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import emailjs from 'emailjs-com';
 
 const Actions = ({ post, isStatic }) => {
   const user = useRecoilValue(userAtom);
@@ -38,6 +39,7 @@ const Actions = ({ post, isStatic }) => {
   const [reply, setReply] = useState('');
   const [replyLoading, setReplyLoading] = useState(false);
   const [reportReason, setReportReason] = useState('');
+  const [reportDetails, setReportDetails] = useState('');
 
   const showToast = useShowToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -192,11 +194,28 @@ const Actions = ({ post, isStatic }) => {
   };
 
   const handleReportSubmit = async () => {
+    let posrtUrl = window.location.href;
     if (!reportReason)
-      return showToast('Error', 'Please select a reason', 'error');
+      return showToast('Info', 'Please select a reason', 'info');
     try {
       // Simulate report submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const templateParams = {
+        report_reason: reportReason,
+        report_details: reportDetails,
+        post_id: post._id,
+        postedBy: user._id,
+        posrtUrl: posrtUrl,
+      };
+
+      // RESTART NPM RUN DEV so chnages im .ENV take effect
+
+      await emailjs.send(
+        import.meta.env.VITE_EmailJS_service_ID,
+        import.meta.env.VITE_EmailJS_template_ID,
+        templateParams,
+        import.meta.env.VITE_EmailJS_user_ID
+      );
+
       showToast('Success', 'Post reported successfully', 'success');
       onReportClose();
     } catch (error) {
@@ -320,6 +339,8 @@ const Actions = ({ post, isStatic }) => {
               <br />
               <Textarea
                 isInvalid
+                value={reportDetails}
+                onChange={(e) => setReportDetails(e.target.value)}
                 placeholder="Please provide additional details (optional)
               "
               />
