@@ -1,0 +1,41 @@
+version: "3.8" # Specify the version of Docker Compose file format
+
+services:
+  server:
+    build:
+      context: ./server # Build the Docker image for the server using the Dockerfile in the server directory
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # Map port 5000 on the host to port 5000 on the container
+    volumes:
+      - ./server:/usr/src/app # Mount the server directory on the host to /usr/src/app in the container
+      - /usr/src/app/node_modules # Ensure the node_modules directory is not overwritten
+    environment:
+      - NODE_ENV=development # Set the environment variable for the server
+      - MONGO_URI=mongodb://mongo:27017/threads # Set the MongoDB connection URI
+    depends_on:
+      - mongo # Ensure the mongo service is started before the server
+
+  client:
+    build:
+      context: ./client # Build the Docker image for the client using the Dockerfile in the client directory
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Map port 3000 on the host to port 80 on the container
+    volumes:
+      - ./client:/usr/src/app # Mount the client directory on the host to /usr/src/app in the container
+      - /usr/src/app/node_modules # Ensure the node_modules directory is not overwritten
+    environment:
+      - NODE_ENV=development # Set the environment variable for the client
+    depends_on:
+      - server # Ensure the server service is started before the client
+
+  mongo:
+    image: mongo:latest # Use the latest MongoDB image from Docker Hub
+    ports:
+      - "27017:27017" # Map port 27017 on the host to port 27017 on the container
+    volumes:
+      - mongo-data:/data/db # Persist MongoDB data using a named volume
+
+volumes:
+  mongo-data: # Define a named volume for MongoDB data persistence
