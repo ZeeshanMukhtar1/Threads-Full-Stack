@@ -72,6 +72,25 @@ Threads Clone is a social media platform with an integrated chat feature, design
 - **sass**: CSS preprocessor for styling.
 - **recoil**: State management library for React applications.
 
+## Docker Images
+
+We have Docker images for this project. You can find them at the following links:
+
+- Server: [zeeshanmukhtar1/threads-full-stack-server](https://hub.docker.com/repository/docker/zeeshanmukhtar1/threads-full-stack-server/general)
+- Client: [zeeshanmukhtar1/threads-full-stack-client](https://hub.docker.com/repository/docker/zeeshanmukhtar1/threads-full-stack-client/general)
+
+For more details and pulling instructions, please visit my Docker Hub account.
+
+### Server
+
+![Docker Image Size](https://img.shields.io/docker/image-size/zeeshanmukhtar1/threads-full-stack-server/0.0.1)
+![Docker Pulls](https://img.shields.io/docker/pulls/zeeshanmukhtar1/threads-full-stack-server)
+
+### Client
+
+![Docker Image Size](https://img.shields.io/docker/image-size/zeeshanmukhtar1/threads-full-stack-client/0.0.1)
+![Docker Pulls](https://img.shields.io/docker/pulls/zeeshanmukhtar1/threads-full-stack-client)
+
 ## Screenshots / Preview 📸
 
 ![Login Page](./client/public/loginPage.png)
