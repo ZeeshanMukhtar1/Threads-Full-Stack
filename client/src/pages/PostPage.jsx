@@ -92,6 +92,8 @@ const PostPage = () => {
 
   // Function for handling mobile app download
   const handleMobileApp = () => {
+    // navigate to the mobile app page
+    navigate('/MobileApp');
     showToast(
       'Info',
       'Thanks for interest in our app. We are currently working on it. Stay tuned for updates!',

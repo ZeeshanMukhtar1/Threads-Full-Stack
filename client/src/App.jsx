@@ -11,6 +11,7 @@ import userAtom from './atoms/userAtom';
 import UpdateProfilePage from './pages/UpdateProfilePage';
 import CreatePost from './components/CreatePost';
 import ChatPage from './pages/ChatPage';
+import MobileApp from './pages/MobileApp';
 import { SettingsPage } from './pages/SettingsPage';
 
 // defining the main App component
@@ -73,6 +74,7 @@ function App() {
             path="/settings"
             element={user ? <SettingsPage /> : <Navigate to={'/auth'} />}
           />
+          <Route path="/MobileApp" element={<MobileApp />} />
         </Routes>
       </Container>
     </Box>

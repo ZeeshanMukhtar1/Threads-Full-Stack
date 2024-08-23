@@ -97,7 +97,8 @@ For more details and pulling instructions, please visit my Docker Hub account.
 ![Profile Page](./client/public/updateProfile.png)
 ![404 Page](./client/public/404.png)
 ![post Page](./client/public/post.png)
-![settngs Page](./client/public/settings.png)
+![spam post Page](./client/public/spam.png)
+![settings Page](./client/public/settings.png)
 ![suggestions Page](./client/public/suggestedUser.png)
 ![chat Page](./client/public/chat.png)
 
