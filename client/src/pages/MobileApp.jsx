@@ -13,6 +13,7 @@ import {
   Image as ChakraImage,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import Snowfall from 'react-snowfall';
 import useShowToast from '../hooks/useShowToast';
 
 export default function MobileApp() {
@@ -32,6 +33,11 @@ export default function MobileApp() {
 
   return (
     <Box>
+      <Snowfall
+        snowflakeCount={150}
+        color="white"
+        style={{ position: 'fixed', width: '100vw', height: '100vh' }} // Cover the entire screen
+      />
       <Flex
         direction={{ base: 'column', md: 'row' }}
         height="100vh"
