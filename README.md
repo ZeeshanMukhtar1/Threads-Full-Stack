@@ -100,6 +100,7 @@ For more details and pulling instructions, please visit my Docker Hub account.
 ![spam post Page](./client/public/spam.png)
 ![settings Page](./client/public/settings.png)
 ![suggestions Page](./client/public/suggestedUser.png)
+![Mobile App Page](./client/public/iceEffect.png)
 ![chat Page](./client/public/chat.png)
 
 ## Acknowledgements
